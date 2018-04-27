@@ -1,0 +1,8 @@
+{
+  "name": "xrtlibrary-traverse",
+  "version": "1.0.1",
+  "description": "Object traverse utility of XRT library.",
+  "main": "library/api.js",
+  "author": "The XRT Authors",
+  "license": "BSD-3-Clause"
+}
