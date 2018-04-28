@@ -146,7 +146,7 @@ function Traverse(inner, path) {
             //  Validate the string.
             if (!CrValidator.ValidateString(inner, charTable)) {
                 throw new Error(Util.format(
-                    "Traverse::stringValidate(): String is invalid (allowed=\"%s\", path=\"%s\")",
+                    "Traverse::stringValidate(): String is invalid (allowed=\"%s\", path=\"%s\").",
                     charTable,
                     path
                 ));
@@ -175,7 +175,7 @@ function Traverse(inner, path) {
             //  Validate the string.
             if (!re.test(inner)) {
                 throw new Error(Util.format(
-                    "Traverse::stringValidate(): String is invalid (regexp=\"%s\", path=\"%s\")",
+                    "Traverse::stringValidate(): String is invalid (regexp=\"%s\", path=\"%s\").",
                     re.source,
                     path
                 ));
