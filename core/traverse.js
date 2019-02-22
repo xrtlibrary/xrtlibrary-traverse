@@ -581,16 +581,28 @@ function Traverse(inner, path) {
     /**
      *  Iterate an object.
      * 
-     *  @param {function(Traverse): void} callback - The map.
+     *  @param {function(Traverse): void} callback - The callback.
      *  @return {Traverse} - Self.
      */
     this.objectForEach = function(callback) {
+        self.objectForEachEx(function(traverse) {
+            callback.call(self, traverse);
+        });
+    };
+
+    /**
+     *  Iterate an object (will callback with key parameter).
+     * 
+     *  @param {function(Traverse, string): void} callback - The callback.
+     *  @return {Traverse} - Self.
+     */
+    this.objectForEachEx = function(callback) {
         //  Check type.
         self.notNull().typeOf(Object);
 
         //  Scan all keys.
         for (var key in inner) {
-            callback.call(self, new Traverse(inner[key], _GetSubPath(key)));
+            callback.call(self, new Traverse(inner[key], _GetSubPath(key)), key);
         }
 
         return self;
