@@ -625,6 +625,19 @@ function Traverse(inner, path) {
     };
 
     /**
+     *  Get whether an object has specified key.
+     * 
+     *  @param {String} key - The key.
+     *  @return {Boolean} - True if so.
+     */
+    this.objectHas = function(key) {
+        //  Check type.
+        self.notNull().typeOf(Object);
+
+        return (key in inner);
+    };
+
+    /**
      *  Iterate an array.
      * 
      *  @param {function(Traverse): void} callback - The map.

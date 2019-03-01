@@ -228,7 +228,7 @@ Iterate an object.
 Callback format:
 
 ```
-function(key: Traverse) {}
+function(value: Traverse) {}
 ```
 
 For example:
@@ -239,10 +239,40 @@ var info = XRTLibTraverse.WrapObject({
     "b": 2,
     "c": 3
 }, false);
-info.objectForEach(function(key) {
-    console.log(key.unwrap());
+info.objectForEach(function(value) {
+    console.log(value.unwrap());
 });
-//  Output: "a", "b", "c".
+//  Output:
+//    1
+//    2
+//    3
+```
+
+#### objectForEachEx(callback: Function): Traverse
+
+Iterate an object (will callback with key parameter).
+
+Callback format:
+
+```
+function(value: Traverse, key: String) {}
+```
+
+For example:
+
+```
+var info = XRTLibTraverse.WrapObject({
+    "a": 1,
+    "b": 2,
+    "c": 3
+}, false);
+info.objectForEach(function(value, key) {
+    console.log(key + " => " + value.unwrap());
+});
+//  Output:
+//    a => 1
+//    b => 2
+//    c => 3
 ```
 
 #### objectSet(key: String, value: *): Traverse
@@ -256,6 +286,20 @@ var data = {};
 var info = XRTLibTraverse.WrapObject(data, false);
 info.objectSet("key", "value");
 console.log(data);   //  Output: {"key": "value"}
+```
+
+#### objectHas(key: String): Boolean
+
+Get whether an object has specified key.
+
+For example:
+
+```
+var data = {"a": 1234, "c": 5678};
+var info = XRTLibTraverse.WrapObject(data, false);
+console.log(info.objectHas("a"));   //  Output: true
+console.log(info.objectHas("b"));   //  Output: false
+console.log(info.objectHas("c"));   //  Output: true
 ```
 
 #### arrayForEach(callback: Function): Traverse
