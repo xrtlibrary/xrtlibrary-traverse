@@ -55,70 +55,152 @@ var XRTLibTraverse = require("xrtlibrary-traverse");
 
 ## API
 
-### Traverse (Object)
+### (Class) Traverse
 
-#### typeOf(constructor: Function): Traverse
+Traverse helper.
 
-Check the type of inner object. If the type of the inner object mismatched, an error will be raised.
+#### traverse.typeOf(constructor)
 
-#### numeric(): Traverse
+Check the type of inner object.
 
-Assume that the inner object is a Number. Equivalent of "typeOf(Number)".
+<u>Exception(s)</u>:
+ - *Traverse.ParameterError*: Raised if the constructor is not valid.
+ - *Traverse.TypeError*: Raised if the inner object is not constructed by the constructor.
 
-#### integer(): Traverse
+<u>Parameter(s)</u>:
+ - constructor (*{new(...args: any[]): object}*): The constructor of the type.
 
-Assume that the inner object is an integer (also a Number).
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
 
-#### boolean(): Traverse
+#### traverse.numeric()
 
-Assume that the inner object is a boolean. Equivalent of "typeOf(Boolean)".
+Assume that the inner object is numeric.
 
-#### string(): Traverse
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised if the inner object is not numeric.
 
-Assume that the inner object is a string. Equivalent of "typeOf(String)".
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
 
-#### stringValidate(charTable: String): Traverse
+#### traverse.integer()
 
-Validate the inner string by given character table. If there is one character in the inner string doesn't occurred in the character table, an error will be raised.
+Assume that the inner object is an integer.
 
-#### stringValidateByRegExp(re: RegExp): Traverse
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised if the inner object is not an integer.
 
-Validate the inner string by given regular expression. If the inner string doesn't matched with the regular expression, an error will be raised.
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
 
-#### jsonLoad(): Traverse
+#### traverse.boolean()
+
+Assume that the inner object is a boolean.
+
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised if the inner object is not boolean.
+
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
+
+#### traverse.string()
+
+Assume that the inner object is a string.
+
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised if the inner object is not string.
+
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
+
+#### traverse.stringValidate(charTable)
+
+Validate the string by given character table.
+
+<u>Exception(s)</u>:
+ - *Traverse.ParameterError*: Raised if the character table is not string.
+ - *Traverse.FormatError*: Raised when the inner string mismatched with the character table.
+ - *Traverse.TypeError*: Raised when the inner object is not string.
+
+<u>Parameter(s)</u>:
+ - charTable (*String*): The character table.
+
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
+
+#### traverse.stringValidateByRegExp(re)
+
+Validate the string by given regular expression.
+
+<u>Exception(s)</u>:
+ - *Traverse.ParameterError*: Raised if the "re" parameter is not a RegExp object.
+ - *Traverse.FormatError*: Raised when the inner string mismatched with the regular expression.
+ - *Traverse.TypeError*: Raised if the inner object is not string.
+
+<u>Parameter(s)</u>:
+ - re (*RegExp*): The regular expression.
+
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
+
+#### traverse.jsonLoad()
 
 Load JSON object from current inner object (a string).
 
-For example:
+<u>Exception(s)</u>:
+ - *Traverse.ParseError*: Raised when the failed to parse the JSON object.
+ - *Traverse.TypeError*: Raised if the inner object is not string.
 
+<u>Return value</u>:
+ - (*Traverse*) The parsed JSON object wrapped with *Traverse*.
+
+<u> Example</u>:
 ```
 var input = "{\"key\": \"value\"}";
 var info = XRTLibTraverse.WrapObject(input, false);
 console.log(info.notNull().string().jsonLoad().sub("key").unwrap());  //  Output: "value".
 ```
 
-#### jsonSave(): Traverse
+#### traverse.jsonSave()
 
 Save JSON object to a new Traverse object.
 
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised when cyclic object value was found.
+ - *Traverse.Error*: Raised when other JSON serialization error occurred.
+
+<u>Return value</u>:
+ - (*Traverse*) The serialized JSON string wrapped with Traverse.
+
+<u> Example</u>:
 ```
 var input = {"key": "value"};
 var info = XRTLibTraverse.WrapObject(input, false);
 console.log(info.jsonSave().unwrap());     //  Output: "{\"key\": \"value\"}".
 ```
 
-#### sub(name: * | String): Traverse
+#### traverse.sub(name)
 
-Go to sub directory. The inner object should be an Object or a Map. When the inner object is a Map, the "name" can be any type. Otherwise, it must be a String.
+Go to sub directory.
 
-For example:
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in one of following situations:
+   - The inner object is NULL.
+   - The inner object is not an Object or a Map object.
+ - *Traverse.ParameterError*: Raised if the "name" parameter is not a string and the inner object is a Object.
+ - *Traverse.KeyNotFoundError*: Raised if the sub path can't be found.
 
+<u>Parameter(s)</u>:
+ - name (*): The name(key) of sub directory.
+
+<u>Return value</u>:
+ - (*Traverse*) Traverse object of sub directory.
+
+<u> Example</u>:
 ```
 var info = XRTLibTraverse.WrapObject({"a": {"b": "c"}}, false);
 console.log(info.sub("a").sub("b").unwrap());  //  Output: "c".
 ```
-
-Another example:
 
 ```
 var mapping = new Map();
@@ -127,62 +209,158 @@ var info = XRTLibTraverse.WrapObject(mapping, false);
 console.log(info.sub("a").sub("b").unwrap());  //  Output: "c".
 ```
 
-#### optionalSub(name: * | String, defaultValue: *): Traverse
+#### traverse.optionalSub(name, defaultValue)
 
 Go to sub directory which can be non-existed.
 
-For example:
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in one of following situations:
+   - The inner object is NULL.
+   - The inner object is not an Object or a Map object.
+ - *Traverse.ParameterError*: Raised if the "name" parameter is not a string and the inner object is a Object.
 
+<u>Parameter(s)</u>:
+ - name (*): The name(key) of sub directory.
+ - defaultValue (*): The default value if the directory doesn't exist.
+
+<u>Return value</u>:
+ - (*Traverse*) Traverse object of sub directory.
+
+<u> Example</u>:
 ```
 var info = XRTLibTraverse.WrapObject({"a": "b"}, false);
 console.log(info.optionalSub("a", "non-exist").unwrap());  //  Output: "b".
 console.log(info.optionalSub("b", "non-exist").unwrap());  //  Output: "non-exist".
 ```
 
-#### notNull(): Traverse
+#### traverse.notNull()
 
-Assume that the inner object is not null. If the inner object is null, an error will be raised.
+Assume that the inner object is not NULL.
 
-#### min(threshold: *): Traverse
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised when the inner object is NULL.
 
-Give minimum value threshold to the inner object (expect: inner >= threshold). An error will be raised when the inner object is lower than the threshold.
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
 
-For example:
+#### traverse.min(threshold)
 
+Give minimum value threshold to the inner object.
+
+<u>Expected</u>:
+ - inner >= threshold
+
+<u>Exception(s)</u>:
+ - *Traverse.ParameterError*: Raised if the type of the inner object is different to the threshold object.
+ - *Traverse.ValueOutOfRangeError*: Raised if the value is not within the threshold.
+
+<u>Parameter(s)</u>:
+ - threshold (*): The threshold.
+
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
+
+<u> Example</u>:
 ```
 var info = XRTLibTraverse.WrapObject(100, false);
 info.min(50);  //  Nothing happened.
 info.min(150); //  An error will be raised.
 ```
 
-#### minExclusive(threshold: *): Traverse
+#### traverse.minExclusive(threshold)
 
-Give exclusive minimum value threshold to the inner object (expect: inner > threshold). An error will be occurred when the inner object is lower than or equal to the threshold.
+Give exclusive minimum value threshold to the inner object.
 
-#### max(threshold: *): Traverse
+<u>Expected</u>:
+ - inner > threshold
 
-Give maximum value threshold to the inner object (expect: inner <= threshold). An error will be raised when the inner object is larger than the threshold.
+<u>Exception(s)</u>:
+ - *Traverse.ParameterError*: Raised if the type of the inner object is different to the threshold object.
+ - *Traverse.ValueOutOfRangeError*: Raised if the value is not within the threshold.
 
+<u>Parameter(s)</u>:
+ - threshold (*): The threshold.
+
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
+
+#### traverse.max(threshold)
+
+Give maximum value threshold to the inner object.
+
+<u>Expected</u>:
+ - inner <= threshold
+
+<u>Exception(s)</u>:
+ - *Traverse.ParameterError*: Raised if the type of the inner object is different to the threshold object.
+ - *Traverse.ValueOutOfRangeError*: Raised if the value is not within the threshold.
+
+<u>Parameter(s)</u>:
+ - threshold (*): The threshold.
+
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
+
+<u> Example</u>:
 ```
 var info = XRTLibTraverse.WrapObject(100, false);
 info.max(150);  //  Nothing happened.
 info.max(50); //  An error will be raised.
 ```
 
-#### maxExclusive(threshold: *): Traverse
+#### traverse.maxExclusive(threshold)
 
-Give exclusive maximum value threshold to the inner object (expect: inner < threshold). An error will be raised when the inner object is larger than or equal to the threshold.
+Give exclusive maximum value threshold to the inner object.
 
-#### range(minValue: *, maxValue: *): Traverse
+<u>Expected</u>:
+ - inner < threshold
 
-Give value threshold to the inner object (expect: min <= inner <= max). Equivalent of "min(minValue).max(maxValue)".
+<u>Exception(s)</u>:
+ - *Traverse.ParameterError*: Raised if the type of the inner object is different to the threshold object.
+ - *Traverse.ValueOutOfRangeError*: Raised if the value is not within the threshold.
 
-#### selectFromArray(from: Array): Traverse
+<u>Parameter(s)</u>:
+ - threshold (*): The threshold.
 
-Select an item from specific array (use inner object as the index).
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
 
-For example:
+#### traverse.range(minValue, maxValue)
 
+Give value threshold to the inner object.
+
+<u>Expected</u>:
+ - min <= inner <= max
+
+<u>Exception(s)</u>:
+ - *Traverse.ParameterError*: Raised if the type of the inner object is different to the threshold objects.
+ - *Traverse.ValueOutOfRangeError*: Raised if the value is not within the thresholds.
+
+<u>Parameter(s)</u>:
+ - minValue (*): The minimum threshold.
+ - maxValue (*): The maximum threshold.
+
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
+
+#### traverse.selectFromArray(from)
+
+Select an item from specific array (inner object as the index).
+
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an integer.
+ - *Traverse.IndexOutOfRangeError*: Raised if the index out of range.
+ - *Traverse.ParameterError*: Raised if the "from" parameter is not valid (not an array).
+
+<u>Parameter(s)</u>:
+ - from (*Array*): The array.
+
+<u>Return value</u>:
+ - (*Traverse*) Traverse object of selected item.
+
+<u> Example</u>:
 ```
 var info = XRTLibTraverse.WrapObject({
     "array": ["a", "b", "c", "d"],
@@ -193,12 +371,23 @@ console.log(info.sub("index1").selectFromArray(info.sub("array").unwrap()).unwra
 console.log(info.sub("index2").selectFromArray(info.sub("array").unwrap()).unwrap());   //  Output: "d".
 ```
 
-#### selectFromObject(from: Object): Traverse
+#### traverse.selectFromObject(from)
 
-Select an item from specific object (use inner object as the key).
+Select an item from specific object (inner object as the key).
 
-For example:
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an integer.
+ - *Traverse.KeyNotFoundError*: Raised if the key doesn't exist.
 
+<u>Parameter(s)</u>:
+ - from (*Object*): The object.
+
+<u>Return value</u>:
+ - (*Traverse*) Traverse object of selected item.
+
+<u> Example</u>:
 ```
 var info = XRTLibTraverse.WrapObject({
     "protocol": "SOCKS5"
@@ -209,30 +398,68 @@ console.log(info.sub("protocol").selectFromObject({
 }).unwrap());   //  Output: 5.
 ```
 
-#### selectFromObjectOptional(from: Object, defaultValue: *): Traverse
+#### traverse.selectFromObjectOptional(from, defaultValue)
 
-Select an optional item from specific object (use inner object as the key).
+Select an optional item from specific object (inner object as the key).
 
-#### selectFromMap(from: Map): Traverse
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an integer.
 
-Select an item from specific map (use inner object as the key).
+<u>Parameter(s)</u>:
+ - from (*Object*): The object.
+ - defaultValue (*): The default value if the key doesn't exist.
 
-#### selectFromMapOptional(from: Map, defaultValue: *): Traverse
+<u>Return value</u>:
+ - (*Traverse*) Traverse object of selected item.
 
-Select an optional item from specific map (use inner object as the key).
+#### traverse.selectFromMap(from)
 
-#### objectForEach(callback: Function): Traverse
+Select an item from specific map (inner object as the key).
+
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised if the inner object is NULL.
+ - *Traverse.KeyNotFoundError*: Raised if the key doesn't exist.
+ - *Traverse.ParameterError*: Raised if the "from" parameter is not valid (not a Map object).
+
+<u>Parameter(s)</u>:
+ - from (Map): The map.
+
+<u>Return value</u>:
+ - (*Traverse*) Traverse object of selected item.
+
+#### traverse.selectFromMapOptional(from, defaultValue)
+
+Select an optional item from specific map (inner object as the key).
+
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised if the inner object is NULL.
+ - *Traverse.ParameterError*: Raised if the "from" parameter is not valid (not a Map object).
+
+<u>Parameter(s)</u>:
+ - from (*Map*): The map.
+ - defaultValue (*): The default value when the key doesn't exist.
+
+<u>Return value</u>:
+ - (Traverse) Traverse object of selected item.
+
+#### traverse.objectForEach(callback)
 
 Iterate an object.
 
-Callback format:
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an Object.
 
-```
-function(value: Traverse) {}
-```
+<u>Parameter(s)</u>:
+ - callback (*(value: Traverse) => void*): The callback.
 
-For example:
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
 
+<u>Example</u>:
 ```
 var info = XRTLibTraverse.WrapObject({
     "a": 1,
@@ -248,18 +475,22 @@ info.objectForEach(function(value) {
 //    3
 ```
 
-#### objectForEachEx(callback: Function): Traverse
+#### traverse.objectForEachEx(callback)
 
 Iterate an object (will callback with key parameter).
 
-Callback format:
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an Object.
 
-```
-function(value: Traverse, key: String) {}
-```
+<u>Parameter(s)</u>:
+ - callback (*(value: Traverse, key: string) => void*): The callback.
 
-For example:
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
 
+<u>Example</u>:
 ```
 var info = XRTLibTraverse.WrapObject({
     "a": 1,
@@ -275,12 +506,23 @@ info.objectForEach(function(value, key) {
 //    c => 3
 ```
 
-#### objectSet(key: String, value: *): Traverse
+#### traverse.objectSet(key, value)
 
 Set a key-value pair within an object.
 
-For example:
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an Object.
 
+<u>Parameter(s)</u>:
+ - key (*String*): The key.
+ - value (*): The value.
+
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
+
+<u>Example</u>:
 ```
 var data = {};
 var info = XRTLibTraverse.WrapObject(data, false);
@@ -288,12 +530,22 @@ info.objectSet("key", "value");
 console.log(data);   //  Output: {"key": "value"}
 ```
 
-#### objectHas(key: String): Boolean
+#### traverse.objectHas(key)
 
 Get whether an object has specified key.
 
-For example:
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an Object.
 
+<u>Parameter(s)</u>:
+ - key (*String*): The key.
+
+<u>Return value</u>:
+ - (*Boolean*) True if so.
+
+<u>Example</u>:
 ```
 var data = {"a": 1234, "c": 5678};
 var info = XRTLibTraverse.WrapObject(data, false);
@@ -302,18 +554,22 @@ console.log(info.objectHas("b"));   //  Output: false
 console.log(info.objectHas("c"));   //  Output: true
 ```
 
-#### arrayForEach(callback: Function): Traverse
+#### traverse.arrayForEach(callback)
 
 Iterate an array.
 
-Callback format:
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an array.
 
-```
-function(item: Traverse) {}
-```
+<u>Parameter(s)</u>:
+ - callback (*(item: Traverse) => void*): The callback.
 
-For example:
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
 
+<u>Example</u>:
 ```
 var info = XRTLibTraverse.WrapObject(["I", "love", "you"], false);
 info.arrayForEach(function(item) {
@@ -322,24 +578,25 @@ info.arrayForEach(function(item) {
 //  Output: "I", "love", "you".
 ```
 
-#### arrayForEachWithDeletion(callback: Function): Traverse
+#### traverse.arrayForEachWithDeletion(callback)
 
 Iterate an array with deletion.
 
-Callback format:
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an array.
 
-```
-function(item: Traverse) {
-    if ([The item should be deleted]) {
-        return true;
-    } else {
-        return false;
-    }
-}
-```
+<u>Parameter(s)</u>:
+ - callback (*(item: Traverse) => Boolean*): The callback.
 
-For example:
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
 
+<u>Note(s)</u>:
+ - If the callback returns true, the item would be deleted.
+
+<u>Example</u>:
 ```
 var info = XRTLibTraverse.WrapObject(["I", "love", "you"], false);
 info.arrayForEachWithDeletion(function(item) {
@@ -348,24 +605,60 @@ info.arrayForEachWithDeletion(function(item) {
 console.log(info.unwrap());  //  Output: ["love"]
 ```
 
-#### arrayMinLength(minLength: Number): Traverse
+#### traverse.arrayMinLength(minLength)
 
 Assume the array has a minimum length.
 
-#### arrayMaxLength(maxLength: Number): Traverse
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an array.
+ - *Traverse.SizeError*: Raised if the array size exceeds.
+
+<u>Parameter(s)</u>:
+ - minLength (*Number*): The minimum length.
+
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
+
+#### traverse.arrayMaxLength(maxLength)
 
 Assume the array has a maximum length.
 
-#### isNull(): Boolean
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an array.
+ - *Traverse.SizeError*: Raised if the array size exceeds.
+
+<u>Parameter(s)</u>:
+ - maxLength (*Number*): The maximum length.
+
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
+
+#### traverse.isNull()
 
 Get whether the inner object is NULL.
 
-#### oneOf(selections: Set | Map | Array | Object): Traverse
+<u>Return value</u>:
+ - (*Boolean*) True if so.
 
-Assume that the inner object is in specific selections. If the inner object is not in the selections, an error will be raised.
+#### traverse.oneOf(selections)
 
-For example:
+Assume that the inner object is in specific selections.
 
+<u>Exception(s)</u>:
+ - Traverse.ParameterError: Raised if the type of "selections" parameter is not supported.
+ - Traverse.KeyNotFoundError: Raised if the item doesn't exist in the "selections".
+
+<u>Parameter(s)</u>:
+ - selections (*Set|Map|Array|Object*): The selections.
+
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
+
+<u>Example</u>:
 ```
 var info = XRTLibTraverse.WrapObject("test", false);
 
@@ -389,20 +682,95 @@ info.oneOf({
 info.oneOf({});                   //  Error will occurred.
 ```
 
-#### inner(): *
+#### traverse.inner()
 
 (Compatible, use unwrap() in new application) Get the inner object.
 
-#### unwrap(): *
+<u>Return</u>:
+ - (*) The inner object.
 
-Unwrap the traverse object. Equivalent of "inner()".
+#### traverse.unwrap()
 
-### WrapObject(innerObject: *, force: Boolean)
+Unwrap the traverse object.
 
-Wrap an object with Traverse. When the force switch is on (true), we will still wrap the object if the inner object is a Traverse. Otherwise, we won't wrap it.
+<u>Return</u>:
+ - (*) The inner object.
 
-For example:
+### (Class) Traverse.Error
 
+Traverse error.
+
+<u>Extend(s)</u>:
+ - *Error*
+
+### (Class) Traverse.ParameterError
+
+Traverse parameter error.
+
+<u>Extend(s)</u>:
+ - *Traverse.Error*
+
+### (Class) Traverse.TypeError
+
+Traverse type error.
+
+<u>Extend(s)</u>:
+ - *Traverse.Error*
+
+### (Class) Traverse.FormatError
+
+Traverse format error.
+
+<u>Extend(s)</u>:
+ - *Traverse.Error*
+
+### (Class) Traverse.ParseError
+
+Traverse parse error.
+
+<u>Extend(s)</u>:
+ - *Traverse.Error*
+
+### (Class) Traverse.SizeError
+
+Traverse size error.
+
+<u>Extend(s)</u>:
+ - *Traverse.Error*
+
+### (Class) Traverse.KeyNotFoundError
+
+Traverse key not found error.
+
+<u>Extend(s)</u>:
+ - *Traverse.Error*
+
+### (Class) Traverse.IndexOutOfRangeError
+
+Traverse index out of range error.
+
+<u>Extend(s)</u>:
+ - *Traverse.Error*
+
+### (Class) Traverse.ValueOutOfRangeError
+
+Traverse value out of range error.
+
+<u>Extend(s)</u>:
+ - *Traverse.Error*
+
+### WrapObject(inner, force)
+
+Wrap an object with Traverse.
+
+<u>Parameter(s)</u>:
+ - inner (*): The inner object.
+ - force (Boolean): Still wrap the object when the inner object is a Traverse.
+
+<u>Return value</u>:
+ - The traverse object.
+
+<u>Example</u>:
 ```
 var wrap1 = XRTLibTraverse.WrapObject({"key": "value"}, false);
 var wrap2 = XRTLibTraverse.WrapObject(wrap1, false);
