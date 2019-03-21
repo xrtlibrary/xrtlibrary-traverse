@@ -184,9 +184,10 @@ function Traverse(inner, path) {
      *  Check the type of inner object.
      * 
      *  Exception(s):
-     *    [1] Traverse.ParameterError: Raised if the constructor is not valid.
-     *    [2] Traverse.TypeError: Raised if the inner object is not constructed 
-     *                            by the constructor.
+     *    [1] Traverse.ParameterError: 
+     *        Raised if the constructor is not valid.
+     *    [2] Traverse.TypeError: 
+     *        Raised if the inner object is not constructed by the constructor.
      * 
      *  @param {{new(...args: any[]): object}} constructor - The constructor of 
      *                                                       the type.
@@ -213,7 +214,8 @@ function Traverse(inner, path) {
      *  Assume that the inner object is numeric.
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised if the inner object is not numeric.
+     *    [1] Traverse.TypeError: 
+     *        Raised if the inner object is not numeric.
      * 
      *  @return {Traverse} - Self.
      */
@@ -226,7 +228,8 @@ function Traverse(inner, path) {
      *  Assume that the inner object is an integer.
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised if the inner object is not an integer.
+     *    [1] Traverse.TypeError: 
+     *        Raised if the inner object is not an integer.
      * 
      *  @return {Traverse} - Self.
      */
@@ -251,7 +254,8 @@ function Traverse(inner, path) {
      *  Assume that the inner object is a boolean.
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised if the inner object is not boolean.
+     *    [1] Traverse.TypeError: 
+     *        Raised if the inner object is not boolean.
      * 
      *  @return {Traverse} - Self.
      */
@@ -264,7 +268,8 @@ function Traverse(inner, path) {
      *  Assume that the inner object is a string.
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised if the inner object is not string.
+     *    [1] Traverse.TypeError: 
+     *        Raised if the inner object is not string.
      * 
      *  @return {Traverse} - Self.
      */
@@ -277,11 +282,12 @@ function Traverse(inner, path) {
      *  Validate the string by given character table.
      * 
      *  Exception(s):
-     *    [1] Traverse.ParameterError: Raised if the character table is not str-
-     *                                 ing.
-     *    [2] Traverse.FormatError: Raised when the inner string mismatched with
-     *                              the character table.
-     *    [3] Traverse.TypeError: Raised when the inner object is not string.
+     *    [1] Traverse.ParameterError: 
+     *        Raised if the character table is not string.
+     *    [2] Traverse.FormatError: 
+     *        Raised when the inner string mismatched with the character table.
+     *    [3] Traverse.TypeError: 
+     *        Raised when the inner object is not string.
      * 
      *  @param {String} charTable - The character table.
      *  @return {Traverse} - Self.
@@ -313,11 +319,13 @@ function Traverse(inner, path) {
      *  Validate the string by given regular expression.
      * 
      *  Exception(s):
-     *    [1] Traverse.ParameterError: Raised if the "re" parameter is not a Re-
-     *                                 gExp object.
-     *    [2] Traverse.FormatError: Raised when the inner string mismatched with
-     *                              the regular expression.
-     *    [3] Traverse.TypeError: Raised if the inner object is not string.
+     *    [1] Traverse.ParameterError: 
+     *        Raised if the "re" parameter is not a RegExp object.
+     *    [2] Traverse.FormatError: 
+     *        Raised when the inner string mismatched with the regular expressi-
+     *        on.
+     *    [3] Traverse.TypeError: 
+     *        Raised if the inner object is not string.
      * 
      *  @param {RegExp} re - The regular expression.
      *  @return {Traverse} - Self.
@@ -351,9 +359,10 @@ function Traverse(inner, path) {
      *  Load JSON object from current inner object (a string).
      * 
      *  Exception(s):
-     *    [1] Traverse.ParseError: Raised when the failed to parse the JSON obj-
-     *                             ect.
-     *    [2] Traverse.TypeError: Raised if the inner object is not string.
+     *    [1] Traverse.ParseError: 
+     *        Raised when the failed to parse the JSON object.
+     *    [2] Traverse.TypeError: 
+     *        Raised if the inner object is not string.
      * 
      *  @return {Traverse} - The parsed JSON object wrapped with Traverse.
      */
@@ -386,9 +395,10 @@ function Traverse(inner, path) {
      *  Save JSON object to a new Traverse object.
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised when cyclic object value was found.
-     *    [2] Traverse.Error: Raised when other JSON serialization error occurr-
-     *                        ed.
+     *    [1] Traverse.TypeError: 
+     *        Raised when cyclic object value was found.
+     *    [2] Traverse.Error: 
+     *        Raised when other JSON serialization error occurred.
      * 
      *  @return {Traverse} - The serialized JSON string wrapped with Traverse.
      */
@@ -425,14 +435,17 @@ function Traverse(inner, path) {
      *  Go to sub directory.
      *  
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised in one of following situations:
+     *    [1] Traverse.TypeError: 
+     *        Raised in one of following situations:
      * 
      *          - The inner object is NULL.
      *          - The inner object is not an Object or a Map object.
      * 
-     *    [2] Traverse.ParameterError: Raised if the "name" parameter is not a
-     *                                 string and the inner object is a Object.
-     *    [3] Traverse.KeyNotFoundError: Raised if the sub path can't be found.
+     *    [2] Traverse.ParameterError: 
+     *        Raised if the "name" parameter is not a string and the inner obje-
+     *        ct is a Object.
+     *    [3] Traverse.KeyNotFoundError: 
+     *        Raised if the sub path can't be found.
      * 
      *  @param {*} name - The name(key) of sub directory.
      *  @return {Traverse} - Traverse object of sub directory.
@@ -482,13 +495,15 @@ function Traverse(inner, path) {
      *  Go to sub directory which can be non-existed.
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised in following situations:
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
      * 
      *          - The inner object is NULL.
      *          - The inner object is not an Object or a Map object.
      * 
-     *    [2] Traverse.ParameterError: Raised if the "name" parameter is not a
-     *                                 string and the inner object is a Object.
+     *    [2] Traverse.ParameterError: 
+     *        Raised if the "name" parameter is not a string and the inner obje-
+     *        ct is a Object.
      * 
      *  @param {*} name - The name(key) of sub directory.
      *  @param {*} defaultValue - The default value if the directory doesn't 
@@ -534,7 +549,8 @@ function Traverse(inner, path) {
      *  Assume that the inner object is not NULL.
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised when the inner object is NULL.
+     *    [1] Traverse.TypeError: 
+     *        Raised when the inner object is NULL.
      * 
      *  @return {Traverse} - Self.
      */
@@ -557,10 +573,11 @@ function Traverse(inner, path) {
      *    [1] inner >= threshold
      * 
      *  Exception(s):
-     *    [1] Traverse.ParameterError: Raised if the type of the inner object is
-     *                                 different to the threshold object.
-     *    [2] Traverse.ValueOutOfRangeError: Raised if the value is not within 
-     *                                       the threshold.
+     *    [1] Traverse.ParameterError: 
+     *        Raised if the type of the inner object is different to the thresh-
+     *        old object.
+     *    [2] Traverse.ValueOutOfRangeError: 
+     *        Raised if the value is not within the threshold.
      * 
      *  @param {*} threshold - The threshold.
      *  @return {Traverse} - Self.
@@ -596,10 +613,11 @@ function Traverse(inner, path) {
      *    [1] inner > threshold
      * 
      *  Exception(s):
-     *    [1] Traverse.ParameterError: Raised if the type of the inner object is
-     *                                 different to the threshold object.
-     *    [2] Traverse.ValueOutOfRangeError: Raised if the value is not within 
-     *                                       the threshold.
+     *    [1] Traverse.ParameterError: 
+     *        Raised if the type of the inner object is different to the thresh-
+     *        old object.
+     *    [2] Traverse.ValueOutOfRangeError: 
+     *        Raised if the value is not within the threshold.
      * 
      *  @param {*} threshold - The threshold.
      *  @return {Traverse} - Self.
@@ -635,10 +653,11 @@ function Traverse(inner, path) {
      *    [1] inner <= threshold
      * 
      *  Exception(s):
-     *    [1] Traverse.ParameterError: Raised if the type of the inner object is
-     *                                 different to the threshold object.
-     *    [2] Traverse.ValueOutOfRangeError: Raised if the value is not within 
-     *                                       the threshold.
+     *    [1] Traverse.ParameterError: 
+     *        Raised if the type of the inner object is different to the thresh-
+     *        old object.
+     *    [2] Traverse.ValueOutOfRangeError: 
+     *        Raised if the value is not within the threshold.
      * 
      *  @param {*} threshold - The threshold.
      *  @return {Traverse} - Self.
@@ -674,10 +693,11 @@ function Traverse(inner, path) {
      *    [1] inner < threshold
      * 
      *  Exception(s):
-     *    [1] Traverse.ParameterError: Raised if the type of the inner object is
-     *                                 different to the threshold object.
-     *    [2] Traverse.ValueOutOfRangeError: Raised if the value is not within 
-     *                                       the threshold.
+     *    [1] Traverse.ParameterError: 
+     *        Raised if the type of the inner object is different to the thresh-
+     *        old object.
+     *    [2] Traverse.ValueOutOfRangeError: 
+     *        Raised if the value is not within the threshold.
      * 
      *  @param {*} threshold - The threshold.
      *  @return {Traverse} - Self.
@@ -713,10 +733,11 @@ function Traverse(inner, path) {
      *    [1] min <= inner <= max
      * 
      *  Exception(s):
-     *    [1] Traverse.ParameterError: Raised if the type of the inner object is
-     *                                 different to the threshold objects.
-     *    [2] Traverse.ValueOutOfRangeError: Raised if the value is not within 
-     *                                       the thresholds.
+     *    [1] Traverse.ParameterError: 
+     *        Raised if the type of the inner object is different to the thresh-
+     *        old objects.
+     *    [2] Traverse.ValueOutOfRangeError: 
+     *        Raised if the value is not within the thresholds.
      * 
      *  @param {*} minValue - The minimum threshold.
      *  @param {*} maxValue - The maximum threshold.
@@ -730,14 +751,16 @@ function Traverse(inner, path) {
      *  Select an item from specific array (inner object as the index).
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised in following situations:
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
      * 
      *          - The inner object is NULL.
      *          - The inner object is not an integer.
      * 
-     *    [2] Traverse.IndexOutOfRangeError: Raised if the index out of range.
-     *    [3] Traverse.ParameterError: Raised if the "from" parameter is not va-
-     *                                 lid (not an array).
+     *    [2] Traverse.IndexOutOfRangeError: 
+     *        Raised if the index out of range.
+     *    [3] Traverse.ParameterError: 
+     *        Raised if the "from" parameter is not valid (not an array).
      * 
      *  @param {Array} from - The array.
      *  @return {Traverse} - Traverse object of selected item.
@@ -770,12 +793,14 @@ function Traverse(inner, path) {
      *  Select an item from specific object (inner object as the key).
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised in following situations:
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
      * 
      *          - The inner object is NULL.
      *          - The inner object is not string.
      * 
-     *    [2] Traverse.KeyNotFoundError: Raised if the key doesn't exist.
+     *    [2] Traverse.KeyNotFoundError: 
+     *        Raised if the key doesn't exist.
      * 
      *  @param {Object} from - The object.
      *  @return {Traverse} - Traverse object of selected item.
@@ -806,7 +831,8 @@ function Traverse(inner, path) {
      *  Select an optional item from specific object (inner object as the key).
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised in following situations:
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
      * 
      *          - The inner object is NULL.
      *          - The inner object is not string.
@@ -834,10 +860,12 @@ function Traverse(inner, path) {
      *  Select an item from specific map (use inner object as the key).
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised if the inner object is NULL.
-     *    [2] Traverse.KeyNotFoundError: Raised if the key doesn't exist.
-     *    [3] Traverse.ParameterError: Raised if the "from" parameter is not va-
-     *                                 lid (not a Map object).
+     *    [1] Traverse.TypeError: 
+     *        Raised if the inner object is NULL.
+     *    [2] Traverse.KeyNotFoundError: 
+     *        Raised if the key doesn't exist.
+     *    [3] Traverse.ParameterError: 
+     *        Raised if the "from" parameter is not valid (not a Map object).
      * 
      *  @param {Map} from - The map.
      *  @return {Traverse} - Traverse object of selected item.
@@ -870,9 +898,10 @@ function Traverse(inner, path) {
      *  Select an optional item from specific map (inner object as the key).
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised if the inner object is NULL.
-     *    [2] Traverse.ParameterError: Raised if the "from" parameter is not va-
-     *                                 lid (not a Map object).
+     *    [1] Traverse.TypeError: 
+     *        Raised if the inner object is NULL.
+     *    [2] Traverse.ParameterError: 
+     *        Raised if the "from" parameter is not valid (not a Map object).
      * 
      *  @param {Map} from - The map.
      *  @param {*} defaultValue - The default value when the key doesn't exist.
@@ -896,7 +925,8 @@ function Traverse(inner, path) {
      *  Iterate an object.
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised in following situations:
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
      * 
      *          - The inner object is NULL.
      *          - The inner object is not an Object.
@@ -914,7 +944,8 @@ function Traverse(inner, path) {
      *  Iterate an object (will callback with key parameter).
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised in following situations:
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
      * 
      *          - The inner object is NULL.
      *          - The inner object is not an Object.
@@ -942,7 +973,8 @@ function Traverse(inner, path) {
      *  Set a key-value pair within an object.
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised in following situations:
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
      * 
      *          - The inner object is NULL.
      *          - The inner object is not an Object.
@@ -965,7 +997,8 @@ function Traverse(inner, path) {
      *  Get whether an object has specified key.
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised in following situations:
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
      * 
      *          - The inner object is NULL.
      *          - The inner object is not an Object.
@@ -984,7 +1017,8 @@ function Traverse(inner, path) {
      *  Iterate an array.
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised in following situations:
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
      * 
      *          - The inner object is NULL.
      *          - The inner object is not an array.
@@ -1011,7 +1045,8 @@ function Traverse(inner, path) {
      *  Iterate an array with deletion.
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised in following situations:
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
      * 
      *          - The inner object is NULL.
      *          - The inner object is not an array.
@@ -1050,12 +1085,14 @@ function Traverse(inner, path) {
      *  Assume the array has a minimum length.
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised in following situations:
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
      * 
      *          - The inner object is NULL.
      *          - The inner object is not an array.
      * 
-     *    [2] Traverse.SizeError: Raised if the array size exceeds.
+     *    [2] Traverse.SizeError: 
+     *        Raised if the array size exceeds.
      * 
      *  @param {Number} minLength - The minimum length.
      *  @return {Traverse} - Self.
@@ -1083,12 +1120,14 @@ function Traverse(inner, path) {
      *  Assume the array has a maximum length.
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: Raised in following situations:
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
      * 
      *          - The inner object is NULL.
      *          - The inner object is not an array.
      * 
-     *    [2] Traverse.SizeError: Raised if the array size exceeds.
+     *    [2] Traverse.SizeError: 
+     *        Raised if the array size exceeds.
      * 
      *  @param {Number} maxLength - The maximum length.
      *  @return {Traverse} - Self.
@@ -1125,10 +1164,10 @@ function Traverse(inner, path) {
      *  Assume that the inner object is in specific selections.
      * 
      *  Exception(s):
-     *    [1] Traverse.ParameterError: Raised if the type of "selections" param-
-     *                                 eter is not supported.
-     *    [2] Traverse.KeyNotFoundError: Raised if the item doesn't exist in the
-     *                                   "selections".
+     *    [1] Traverse.ParameterError: 
+     *        Raised if the type of "selections" parameter is not supported.
+     *    [2] Traverse.KeyNotFoundError: 
+     *        Raised if the item doesn't exist in the "selections".
      * 
      *  @param {Set|Map|Array|Object} selections - The selections.
      *  @return {Traverse} - Self.
