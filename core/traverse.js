@@ -1201,6 +1201,59 @@ function Traverse(inner, path) {
     }
 
     /**
+     *  Assume that the inner conforms to custom rule.
+     * 
+     *  Note(s):
+     *    [1] The callback return true if the inner conforms the custom rule.
+     * 
+     *  Exception(s):
+     *    [1] Traverse.Parameter:
+     *        Raised in following situations:
+     * 
+     *         - The callback is not a Function.
+     *         - The callback doesn't return a Boolean.
+     * 
+     *    [2] Traverse.Error:
+     *        Raised when the callback return false.
+     * 
+     *  @param {(inner: *) => Boolean)} callback - The rule callback.
+     *  @return {Traverse} - Self.
+     */
+    this.customRule = function(callback) {
+        //  Check type.
+        if (!(callback instanceof Function)) {
+            throw new TraverseParameterError("Expect a Function.");
+        }
+        
+        var isConformed = callback.call(self, inner);
+
+        //  Check the return value.
+        if (
+            isConformed === null || 
+            typeof(isConformed) == "undefined" ||
+            !CrType.IsInstanceOf(isConformed, Boolean)
+        ) {
+            throw new TraverseParameterError(
+                Util.format(
+                    "Callback should return a Boolean. (path=\"%s\")",
+                    path
+                )
+            );
+        }
+
+        if (!isConformed) {
+            throw new TraverseError(
+                Util.format(
+                    "The inner doesn't conform the custom rule. (path=\"%s\")",
+                    path
+                )
+            );
+        }
+
+        return self;
+    };
+
+    /**
      *  (Compatible, use unwrap() in new application) Get the inner object.
      * 
      *  @return {*} - The inner object.

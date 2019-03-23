@@ -682,6 +682,38 @@ info.oneOf({
 info.oneOf({});                   //  Error will occurred.
 ```
 
+#### traverse.customRule(callback)
+
+Assume that the inner conforms to custom rule.
+
+<u>Note(s)</u>:
+ - The callback return true if the inner conforms the custom rule.
+
+<u>Exception(s)</u>:
+ - *Traverse.Parameter*: Raised in the following situations:
+    - The callback is not a Function.
+    - The callback doesn't return a Boolean.
+ - *Traverse.Error*: Raised when the callback return false.
+
+<u>Parameter(s)</u>:
+ - callback (*(item: \*) => Boolean)*)
+
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
+
+<u>Example</u>:
+```
+var info = XRTLibTraverse.WrapObject("info", false);
+
+info.customRule(function(inner) {
+    if (inner == "info") {
+        return true;
+    } else {
+        return false;
+    }
+});
+```
+
 #### traverse.inner()
 
 (Compatible, use unwrap() in new application) Get the inner object.
