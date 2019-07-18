@@ -687,7 +687,7 @@ info.oneOf({});                   //  Error will occurred.
 Assume that the inner conforms to custom rule.
 
 <u>Note(s)</u>:
- - The callback return true if the inner conforms the custom rule.
+ - The callback should return true if the inner conforms the custom rule.
 
 <u>Exception(s)</u>:
  - *Traverse.Parameter*: Raised in the following situations:
