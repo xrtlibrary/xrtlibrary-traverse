@@ -21,19 +21,15 @@ const Util = require("util");
  *  Traverse error.
  * 
  *  @constructor
+ *  @extends {Error}
  *  @param {String} [message] - The message.
  */
-function TraverseError(message) {
+function TraverseError(message = "") {
     //  Let parent class initialize.
-    if (arguments.length > 0) {
-        Error.call(this, message);
-        this.message = message;
-    } else {
-        Error.call(this);
-        this.message = "Unknown error.";
-    }
+    Error.call(this, message);
     Error.captureStackTrace(this, this.constructor);
     this.name = this.constructor.name;
+    this.message = message;
 }
 
 /**
@@ -43,9 +39,9 @@ function TraverseError(message) {
  *  @extends {TraverseError}
  *  @param {String} [message] - The message.
  */
-function TraverseParameterError(message) {
+function TraverseParameterError(message = "") {
     //  Let parent class initialize.
-    TraverseError.apply(this, arguments);
+    TraverseError.call(this, message);
 }
 
 /**
@@ -55,9 +51,9 @@ function TraverseParameterError(message) {
  *  @extends {TraverseError}
  *  @param {String} [message] - The message.
  */
-function TraverseTypeError(message) {
+function TraverseTypeError(message = "") {
     //  Let parent class initialize.
-    TraverseError.apply(this, arguments);
+    TraverseError.call(this, message);
 }
 
 /**
@@ -67,9 +63,9 @@ function TraverseTypeError(message) {
  *  @extends {TraverseError}
  *  @param {String} [message] - The message.
  */
-function TraverseFormatError(message) {
+function TraverseFormatError(message = "") {
     //  Let parent class initialize.
-    TraverseError.apply(this, arguments);
+    TraverseError.call(this, message);
 }
 
 /**
@@ -79,9 +75,9 @@ function TraverseFormatError(message) {
  *  @extends {TraverseError}
  *  @param {String} [message] - The message.
  */
-function TraverseParseError(message) {
+function TraverseParseError(message = "") {
     //  Let parent class initialize.
-    TraverseError.apply(this, arguments);
+    TraverseError.call(this, message);
 }
 
 /**
@@ -91,9 +87,9 @@ function TraverseParseError(message) {
  *  @extends {TraverseError}
  *  @param {String} [message] - The message.
  */
-function TraverseSizeError(message) {
+function TraverseSizeError(message = "") {
     //  Let parent class initialize.
-    TraverseError.apply(this, arguments);
+    TraverseError.call(this, message);
 }
 
 /**
@@ -103,9 +99,9 @@ function TraverseSizeError(message) {
  *  @extends {TraverseError}
  *  @param {String} [message] - The message.
  */
-function TraverseKeyNotFoundError(message) {
+function TraverseKeyNotFoundError(message = "") {
     //  Let parent class initialize.
-    TraverseError.apply(this, arguments);
+    TraverseError.call(this, message);
 }
 
 /**
@@ -115,9 +111,9 @@ function TraverseKeyNotFoundError(message) {
  *  @extends {TraverseError}
  *  @param {String} [message] - The message.
  */
-function TraverseIndexOutOfRangeError(message) {
+function TraverseIndexOutOfRangeError(message = "") {
     //  Let parent class initialize.
-    TraverseError.apply(this, arguments);
+    TraverseError.call(this, message);
 }
 
 /**
@@ -127,9 +123,9 @@ function TraverseIndexOutOfRangeError(message) {
  *  @extends {TraverseError}
  *  @param {String} [message] - The message.
  */
-function TraverseValueOutOfRangeError(message) {
+function TraverseValueOutOfRangeError(message = "") {
     //  Let parent class initialize.
-    TraverseError.apply(this, arguments);
+    TraverseError.call(this, message);
 }
 
 /**
