@@ -55,6 +55,10 @@ const XRTLibTraverse = require("xrtlibrary-traverse");
 
 ## API
 
+### (Constant) Traverse.DEFAULT_COMPARATOR
+
+The default value comparator used by traverse module (which uses JavaScript's "==", "<=", "<", ">=", ">" operators to compare values).
+
 ### (Class) Traverse
 
 Traverse helper.
@@ -243,7 +247,7 @@ Assume that the inner object is not NULL.
 <u>Return value</u>:
  - (*Traverse*) Self reference.
 
-#### traverse.min(threshold)
+#### traverse.min(threshold, [comparator = Traverse.DEFAULT_COMPARATOR])
 
 Give minimum value threshold to the inner object.
 
@@ -256,6 +260,7 @@ Give minimum value threshold to the inner object.
 
 <u>Parameter(s)</u>:
  - threshold (*): The threshold.
+ - comparator (*Traverse.Comparator*): (Optional) The comparator.
 
 <u>Return value</u>:
  - (*Traverse*) Self reference.
@@ -267,7 +272,7 @@ info.min(50);  //  Nothing happened.
 info.min(150); //  An error will be raised.
 ```
 
-#### traverse.minExclusive(threshold)
+#### traverse.minExclusive(threshold, [comparator = Traverse.DEFAULT_COMPARATOR])
 
 Give exclusive minimum value threshold to the inner object.
 
@@ -280,11 +285,12 @@ Give exclusive minimum value threshold to the inner object.
 
 <u>Parameter(s)</u>:
  - threshold (*): The threshold.
+ - comparator (*Traverse.Comparator*): (Optional) The comparator.
 
 <u>Return value</u>:
  - (*Traverse*) Self reference.
 
-#### traverse.max(threshold)
+#### traverse.max(threshold, [comparator = Traverse.DEFAULT_COMPARATOR])
 
 Give maximum value threshold to the inner object.
 
@@ -297,6 +303,7 @@ Give maximum value threshold to the inner object.
 
 <u>Parameter(s)</u>:
  - threshold (*): The threshold.
+ - comparator (*Traverse.Comparator*): (Optional) The comparator.
 
 <u>Return value</u>:
  - (*Traverse*) Self reference.
@@ -308,7 +315,7 @@ info.max(150);  //  Nothing happened.
 info.max(50); //  An error will be raised.
 ```
 
-#### traverse.maxExclusive(threshold)
+#### traverse.maxExclusive(threshold, [comparator = Traverse.DEFAULT_COMPARATOR])
 
 Give exclusive maximum value threshold to the inner object.
 
@@ -321,11 +328,12 @@ Give exclusive maximum value threshold to the inner object.
 
 <u>Parameter(s)</u>:
  - threshold (*): The threshold.
+ - comparator (*Traverse.Comparator*): (Optional) The comparator.
 
 <u>Return value</u>:
  - (*Traverse*) Self reference.
 
-#### traverse.range(minValue, maxValue)
+#### traverse.range(minValue, maxValue, [comparator = Traverse.DEFAULT_COMPARATOR])
 
 Give value threshold to the inner object.
 
@@ -339,6 +347,7 @@ Give value threshold to the inner object.
 <u>Parameter(s)</u>:
  - minValue (*): The minimum threshold.
  - maxValue (*): The maximum threshold.
+ - comparator (*Traverse.Comparator*): (Optional) The comparator.
 
 <u>Return value</u>:
  - (*Traverse*) Self reference.
@@ -727,6 +736,121 @@ Unwrap the traverse object.
 
 <u>Return</u>:
  - (*) The inner object.
+
+### (Class) Traverse.Comparator&lt;T&gt;
+
+Value comparator for traverse module.
+
+#### comparator.eq(a, b)
+
+Get whether two values ("a" and "b") are equal.
+
+<u>Parameter(s)</u>:
+ - a (*T*): The value "a".
+ - b (*T*): The value "b".
+
+<u>Return value</u>:
+ - (*Boolean*) True if so.
+
+#### comparator.le(a, b)
+
+Get whether value "a" is less than or equal to value "b".
+
+<u>Parameter(s)</u>:
+ - a (*T*): The value "a".
+ - b (*T*): The value "b".
+
+<u>Return value</u>:
+ - (*Boolean*) True if so.
+
+#### comparator.lt(a, b)
+
+Get whether value "a" is less than value "b".
+
+<u>Parameter(s)</u>:
+ - a (*T*): The value "a".
+ - b (*T*): The value "b".
+
+<u>Return value</u>:
+ - (*Boolean*) True if so.
+
+#### comparator.ge(a, b)
+
+Get whether value "a" is greater than or equal to value "b".
+
+<u>Parameter(s)</u>:
+ - a (*T*): The value "a".
+ - b (*T*): The value "b".
+
+<u>Return value</u>:
+ - (*Boolean*) True if so.
+
+#### comparator.gt(a, b)
+
+Get whether value "a" is greater than value "b".
+
+<u>Parameter(s)</u>:
+ - a (*T*): The value "a".
+ - b (*T*): The value "b".
+
+<u>Return value</u>:
+ - (*Boolean*) True if so.
+
+#### Example (use customized comparator)
+
+First, create a class that inherits from this class, implements all 5 methods with your own comparation algorithm, like following:
+
+```
+const Util = require("util");
+
+/*
+ *  My custom comparator.
+ *
+ *  @constructor
+ *  @extends {Traverse.Comparator}
+ */
+function CustomComparator() {
+    //  Let parent class initialize.
+    Traverse.Comparator.call(this);
+
+    //
+    //  Public methods.
+    //
+    this.eq = function(a, b) {
+        return a.key == b.key;
+    };
+    this.le = function(a, b) {
+        return a.key <= b.key;
+    };
+    this.lt = function(a, b) {
+        return a.key < b.key;
+    };
+    this.ge = function(a, b) {
+        return a.key >= b.key;
+    };
+    this.gt = function(a, b) {
+        return a.key > b.key;
+    };
+}
+
+//  Set inheritance.
+Util.inherits(CustomComparator, Traverse.Comparator);
+```
+
+Then you have to create an instance of your custom comparator, like following:
+
+```
+let comparator = new CustomComparator();
+```
+
+Now you can use it with *Traverse*:
+
+```
+let root = WrapObject({
+    "key": 100
+}, false);
+root.range({"key": 10}, {"key": 1000}, comparator);
+```
 
 ### (Class) Traverse.Error
 

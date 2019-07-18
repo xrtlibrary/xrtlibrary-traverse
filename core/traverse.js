@@ -129,6 +129,73 @@ function TraverseValueOutOfRangeError(message = "") {
 }
 
 /**
+ *  Value comparator for traverse module.
+ * 
+ *  @constructor
+ *  @template T
+ */
+function TraverseComparator() {
+    //
+    //  Public methods.
+    //
+
+    /**
+     *  Get whether two values ("a" and "b") are equal.
+     * 
+     *  @param {T} a - The value "a".
+     *  @param {T} b - The value "b".
+     *  @return {Boolean} - True if so.
+     */
+    this.eq = function(a, b) {
+        return a == b;
+    };
+
+    /**
+     *  Get whether value "a" is less than or equal to value "b".
+     * 
+     *  @param {T} a - The value "a".
+     *  @param {T} b - The value "b".
+     *  @return {Boolean} - True if so.
+     */
+    this.le = function(a, b) {
+        return a <= b;
+    };
+
+    /**
+     *  Get whether value "a" is less than value "b".
+     * 
+     *  @param {T} a - The value "a".
+     *  @param {T} b - The value "b".
+     *  @return {Boolean} - True if so.
+     */
+    this.lt = function(a, b) {
+        return a < b;
+    };
+
+    /**
+     *  Get whether value "a" is greater than or equal to value "b".
+     * 
+     *  @param {T} a - The value "a".
+     *  @param {T} b - The value "b".
+     *  @return {Boolean} - True if so.
+     */
+    this.ge = function(a, b) {
+        return a >= b;
+    };
+
+    /**
+     *  Get whether value "a" is greater than value "b".
+     * 
+     *  @param {T} a - The value "a".
+     *  @param {T} b - The value "b".
+     *  @return {Boolean} - True if so.
+     */
+    this.gt = function(a, b) {
+        return a > b;
+    };
+}
+
+/**
  *  Traverse helper.
  * 
  *  @constructor
@@ -580,9 +647,13 @@ function Traverse(inner, path) {
      *        Raised if the value is not within the threshold.
      * 
      *  @param {*} threshold - The threshold.
+     *  @param {TraverseComparator} [comparator] - The comparator.
      *  @return {Traverse} - Self.
      */
-    this.min = function(threshold) {
+    this.min = function(
+        threshold, 
+        comparator = Traverse.DEFAULT_COMPARATOR
+    ) {
         if (inner !== null) {
             //  Check object type.
             if (!CrType.IsSameType(inner, threshold)) {
@@ -593,7 +664,7 @@ function Traverse(inner, path) {
             }
 
             //  Check value range.
-            if (inner < threshold) {
+            if (comparator.lt(inner, threshold)) {
                 throw new TraverseValueOutOfRangeError(Util.format(
                     "Value is too small (path=\"%s\", require='>=', " + 
                     "threshold=%s).",
@@ -620,9 +691,13 @@ function Traverse(inner, path) {
      *        Raised if the value is not within the threshold.
      * 
      *  @param {*} threshold - The threshold.
+     *  @param {TraverseComparator} [comparator] - The comparator.
      *  @return {Traverse} - Self.
      */
-    this.minExclusive = function(threshold) {
+    this.minExclusive = function(
+        threshold, 
+        comparator = Traverse.DEFAULT_COMPARATOR
+    ) {
         if (inner !== null) {
             //  Check object type.
             if (!CrType.IsSameType(inner, threshold)) {
@@ -633,7 +708,7 @@ function Traverse(inner, path) {
             }
 
             //  Check value range.
-            if (inner <= threshold) {
+            if (comparator.le(inner, threshold)) {
                 throw new TraverseValueOutOfRangeError(Util.format(
                     "Value is too small (path=\"%s\", require='>', " + 
                     "threshold=%s.",
@@ -660,9 +735,13 @@ function Traverse(inner, path) {
      *        Raised if the value is not within the threshold.
      * 
      *  @param {*} threshold - The threshold.
+     *  @param {TraverseComparator} [comparator] - The comparator.
      *  @return {Traverse} - Self.
      */
-    this.max = function(threshold) {
+    this.max = function(
+        threshold, 
+        comparator = Traverse.DEFAULT_COMPARATOR
+    ) {
         if (inner !== null) {
             //  Check object type.
             if (!CrType.IsSameType(inner, threshold)) {
@@ -673,7 +752,7 @@ function Traverse(inner, path) {
             }
 
             //  Check value range.
-            if (inner > threshold) {
+            if (comparator.gt(inner, threshold)) {
                 throw new TraverseValueOutOfRangeError(Util.format(
                     "Value is too large (path=\"%s\", require='<=', " + 
                     "threshold=%s).",
@@ -700,9 +779,13 @@ function Traverse(inner, path) {
      *        Raised if the value is not within the threshold.
      * 
      *  @param {*} threshold - The threshold.
+     *  @param {TraverseComparator} [comparator] - The comparator.
      *  @return {Traverse} - Self.
      */
-    this.maxExclusive = function(threshold) {
+    this.maxExclusive = function(
+        threshold, 
+        comparator = Traverse.DEFAULT_COMPARATOR
+    ) {
         if (inner !== null) {
             //  Check object type.
             if (!CrType.IsSameType(inner, threshold)) {
@@ -713,7 +796,7 @@ function Traverse(inner, path) {
             }
 
             //  Check value range.
-            if (inner >= threshold) {
+            if (comparator.ge(inner, threshold)) {
                 throw new TraverseValueOutOfRangeError(Util.format(
                     "Value is too large (path=\"%s\", require='<', " + 
                     "threshold=%s).",
@@ -741,10 +824,15 @@ function Traverse(inner, path) {
      * 
      *  @param {*} minValue - The minimum threshold.
      *  @param {*} maxValue - The maximum threshold.
+     *  @param {TraverseComparator} [comparator] - The comparator.
      *  @return {Traverse} - Self.
      */
-    this.range = function(minValue, maxValue) {
-        return self.min(minValue).max(maxValue);
+    this.range = function(
+        minValue, 
+        maxValue, 
+        comparator = comparator = Traverse.DEFAULT_COMPARATOR
+    ) {
+        return self.min(minValue, comparator).max(maxValue, comparator);
     };
 
     /**
@@ -1271,6 +1359,7 @@ function Traverse(inner, path) {
         return self.inner();
     };
 }
+Traverse.DEFAULT_COMPARATOR = new TraverseComparator();
 Traverse.Error = TraverseError;
 Traverse.ParameterError = TraverseParameterError;
 Traverse.TypeError = TraverseTypeError;
@@ -1280,6 +1369,7 @@ Traverse.SizeError = TraverseSizeError;
 Traverse.KeyNotFoundError = TraverseKeyNotFoundError;
 Traverse.IndexOutOfRangeError = TraverseIndexOutOfRangeError;
 Traverse.ValueOutOfRangeError = TraverseValueOutOfRangeError;
+Traverse.Comparator = TraverseComparator;
 
 //
 //  Public functions.
