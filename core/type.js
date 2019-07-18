@@ -16,7 +16,11 @@
  *  @return {Boolean} - True if type matches.
  */
 function IsInstanceOf(instance, constructor) {
-    if (constructor == Number || constructor == Boolean || constructor == String) {
+    if (
+        constructor == Number || 
+        constructor == Boolean || 
+        constructor == String
+    ) {
         return instance.constructor == constructor;
     } else {
         return (instance instanceof constructor);
@@ -33,10 +37,16 @@ function IsInstanceOf(instance, constructor) {
 function IsSameType(instance1, instance2) {
     let t1 = typeof(instance1);
     let t2 = typeof(instance2);
-    if ((instance1 === null && instance2 !== null) || (instance2 === null && instance1 !== null)) {
+    if (
+        (instance1 === null && instance2 !== null) || 
+        (instance2 === null && instance1 !== null)
+    ) {
         return false;
     }
-    if ((t1 == "undefined" && t2 != "undefined") || (t2 == "undefined" && t1 != "undefined")) {
+    if (
+        (t1 == "undefined" && t2 != "undefined") || 
+        (t2 == "undefined" && t1 != "undefined")
+    ) {
         return false;
     }
     return t1 == t2 && IsInstanceOf(instance1, instance2.constructor);
