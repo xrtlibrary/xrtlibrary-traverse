@@ -7,9 +7,11 @@
 //
 //  Imports.
 //
-var CrType = require("./type");
-var CrValidator = require("./validator");
-var Util = require("util");
+
+//  Imported modules.
+const CrType = require("./type");
+const CrValidator = require("./validator");
+const Util = require("util");
 
 //
 //  Classes.
@@ -143,7 +145,7 @@ function Traverse(inner, path) {
     //
 
     //  Self reference.
-    var self = this;
+    let self = this;
 
     //
     //  Private methods.
@@ -368,15 +370,16 @@ function Traverse(inner, path) {
      */
     this.jsonLoad = function() {
         //  Get the sub path.
-        var subPath = _GetSubPath("[JSON(Load)]");
+        let subPath = _GetSubPath("[JSON(Load)]");
 
         if (!self.isNull()) {
             //  Ensure the inner object is a string.
             self.string();
 
             //  Parse the JSON.
+            let parsed = null;
             try {
-                var parsed = JSON.parse(inner);
+                parsed = JSON.parse(inner);
             } catch(error) {
                 throw new TraverseParseError(Util.format(
                     "Unable to parse JSON object (error=\"%s\", path=\"%s\").",
@@ -404,8 +407,9 @@ function Traverse(inner, path) {
      */
     this.jsonSave = function() {
         //  Serialize.
+        let serialized = null;
         try {
-            var serialized = JSON.stringify(inner);
+            serialized = JSON.stringify(inner);
         } catch(error) {
             //
             //  Reference(s):
@@ -455,7 +459,7 @@ function Traverse(inner, path) {
         self.notNull();
 
         //  Get the sub path.
-        var subPath = _GetSubPath(name);
+        let subPath = _GetSubPath(name);
 
         if (CrType.IsInstanceOf(inner, Map)) {
             if (inner.has(name)) {
@@ -515,7 +519,7 @@ function Traverse(inner, path) {
         self.notNull();
 
         //  Get the sub path.
-        var subPath = _GetSubPath(name);
+        let subPath = _GetSubPath(name);
 
         if (CrType.IsInstanceOf(inner, Map)) {
             if (inner.has(name)) {
@@ -958,7 +962,7 @@ function Traverse(inner, path) {
         self.notNull().typeOf(Object);
 
         //  Scan all keys.
-        for (var key in inner) {
+        for (let key in inner) {
             callback.call(
                 self, 
                 new Traverse(inner[key], _GetSubPath(key)), 
@@ -1031,7 +1035,7 @@ function Traverse(inner, path) {
         self.notNull().typeOf(Array);
 
         //  Scan all items.
-        for (var i = 0; i < inner.length; ++i) {
+        for (let i = 0; i < inner.length; ++i) {
             callback.call(self, new Traverse(
                 inner[i], 
                 _GetSubPath(Util.format("[%d]", i))
@@ -1062,9 +1066,9 @@ function Traverse(inner, path) {
         self.notNull().typeOf(Array);
 
         //  Scan all items.
-        var cursor = 0;
+        let cursor = 0;
         while (cursor < inner.length) {
-            var isDelete = callback.call(
+            let isDelete = callback.call(
                 self, 
                 new Traverse(
                     inner[cursor], 
@@ -1102,7 +1106,7 @@ function Traverse(inner, path) {
         self.notNull().typeOf(Array);
 
         //  Check array length.
-        var currentLength = inner.length;
+        let currentLength = inner.length;
         if (currentLength < minLength) {
             throw new TraverseSizeError(Util.format(
                 "Array should have at least %d item(s) (path=\"%s\", " + 
@@ -1137,7 +1141,7 @@ function Traverse(inner, path) {
         self.notNull().typeOf(Array);
 
         //  Check array length.
-        var currentLength = inner.length;
+        let currentLength = inner.length;
         if (currentLength > maxLength) {
             throw new TraverseSizeError(Util.format(
                 "Array should have at most %d item(s) (path=\"%s\", " + 
@@ -1174,7 +1178,7 @@ function Traverse(inner, path) {
      */
     this.oneOf = function(selections) {
         if (inner !== null) {
-            var has = false;
+            let has = false;
             if (selections instanceof Set) {
                 has = selections.has(inner);
             } else if (selections instanceof Map) {
@@ -1225,7 +1229,7 @@ function Traverse(inner, path) {
             throw new TraverseParameterError("Expect a Function.");
         }
         
-        var isConformed = callback.call(self, inner);
+        let isConformed = callback.call(self, inner);
 
         //  Check the return value.
         if (

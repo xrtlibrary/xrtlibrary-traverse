@@ -7,7 +7,9 @@
 //
 //  Imports.
 //
-var CrTraverse = require("./../core/traverse");
+
+//  Imported modules.
+const CrTraverse = require("./../core/traverse");
 
 //  Export public APIs.
 module.exports = {

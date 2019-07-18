@@ -31,8 +31,8 @@ function IsInstanceOf(instance, constructor) {
  *  @return {Boolean} - True if types are the same.
  */
 function IsSameType(instance1, instance2) {
-    var t1 = typeof(instance1);
-    var t2 = typeof(instance2);
+    let t1 = typeof(instance1);
+    let t2 = typeof(instance2);
     if ((instance1 === null && instance2 !== null) || (instance2 === null && instance1 !== null)) {
         return false;
     }

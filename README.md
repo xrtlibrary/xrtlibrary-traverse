@@ -7,7 +7,7 @@ In practice, we got trouble in reading configurations from JSON object securely 
 For example, we have a socket configuration like:
 
 ```
-var config = {
+let config = {
     "address": "127.0.0.1",
     "port": 443
 };
@@ -16,8 +16,8 @@ var config = {
 In real word, you shouldn't read the configuration like this:
 
 ```
-var address = config["address"];
-var port = config["port"];
+let address = config["address"];
+let port = config["port"];
 ```
 
 Because it's insecure, the "address" and "port" must exist and the "port" must be an integer larger than 0. So if you want to write secure codes, you have to write a lot of codes.
@@ -25,14 +25,14 @@ Because it's insecure, the "address" and "port" must exist and the "port" must b
 So we wrapped these codes into this module, now you can use following code to read it securely in only several lines of code. Like:
 
 ```
-var XRTLibTraverse = require("xrtlibrary-traverse");
+const XRTLibTraverse = require("xrtlibrary-traverse");
 try {
     //  Wrap the configuration.
-    var info = XRTLibTraverse.WrapObject(config, false);
+    let info = XRTLibTraverse.WrapObject(config, false);
 
     //  Read address and port.
-    var address = info.sub("address").notNull().typeOf(String).unwrap();
-    var port = info.sub("port").notNull().integer().minExclusive(0).unwrap();
+    let address = info.sub("address").notNull().typeOf(String).unwrap();
+    let port = info.sub("port").notNull().integer().minExclusive(0).unwrap();
 } catch(error) {
     console.log("Invalid configuration.");
     //  Exit here.
@@ -50,7 +50,7 @@ npm install xrtlibrary-traverse --save
 Then you can import this library in your JavaScript code:
 
 ```
-var XRTLibTraverse = require("xrtlibrary-traverse");
+const XRTLibTraverse = require("xrtlibrary-traverse");
 ```
 
 ## API
@@ -156,8 +156,8 @@ Load JSON object from current inner object (a string).
 
 <u> Example</u>:
 ```
-var input = "{\"key\": \"value\"}";
-var info = XRTLibTraverse.WrapObject(input, false);
+let input = "{\"key\": \"value\"}";
+let info = XRTLibTraverse.WrapObject(input, false);
 console.log(info.notNull().string().jsonLoad().sub("key").unwrap());  //  Output: "value".
 ```
 
@@ -174,8 +174,8 @@ Save JSON object to a new Traverse object.
 
 <u> Example</u>:
 ```
-var input = {"key": "value"};
-var info = XRTLibTraverse.WrapObject(input, false);
+let input = {"key": "value"};
+let info = XRTLibTraverse.WrapObject(input, false);
 console.log(info.jsonSave().unwrap());     //  Output: "{\"key\": \"value\"}".
 ```
 
@@ -198,14 +198,14 @@ Go to sub directory.
 
 <u> Example</u>:
 ```
-var info = XRTLibTraverse.WrapObject({"a": {"b": "c"}}, false);
+let info = XRTLibTraverse.WrapObject({"a": {"b": "c"}}, false);
 console.log(info.sub("a").sub("b").unwrap());  //  Output: "c".
 ```
 
 ```
-var mapping = new Map();
+let mapping = new Map();
 mapping.set("a", {"b": "c"});
-var info = XRTLibTraverse.WrapObject(mapping, false);
+let info = XRTLibTraverse.WrapObject(mapping, false);
 console.log(info.sub("a").sub("b").unwrap());  //  Output: "c".
 ```
 
@@ -228,7 +228,7 @@ Go to sub directory which can be non-existed.
 
 <u> Example</u>:
 ```
-var info = XRTLibTraverse.WrapObject({"a": "b"}, false);
+let info = XRTLibTraverse.WrapObject({"a": "b"}, false);
 console.log(info.optionalSub("a", "non-exist").unwrap());  //  Output: "b".
 console.log(info.optionalSub("b", "non-exist").unwrap());  //  Output: "non-exist".
 ```
@@ -262,7 +262,7 @@ Give minimum value threshold to the inner object.
 
 <u> Example</u>:
 ```
-var info = XRTLibTraverse.WrapObject(100, false);
+let info = XRTLibTraverse.WrapObject(100, false);
 info.min(50);  //  Nothing happened.
 info.min(150); //  An error will be raised.
 ```
@@ -303,7 +303,7 @@ Give maximum value threshold to the inner object.
 
 <u> Example</u>:
 ```
-var info = XRTLibTraverse.WrapObject(100, false);
+let info = XRTLibTraverse.WrapObject(100, false);
 info.max(150);  //  Nothing happened.
 info.max(50); //  An error will be raised.
 ```
@@ -362,7 +362,7 @@ Select an item from specific array (inner object as the index).
 
 <u> Example</u>:
 ```
-var info = XRTLibTraverse.WrapObject({
+let info = XRTLibTraverse.WrapObject({
     "array": ["a", "b", "c", "d"],
     "index1": 0,
     "index2": 3
@@ -389,7 +389,7 @@ Select an item from specific object (inner object as the key).
 
 <u> Example</u>:
 ```
-var info = XRTLibTraverse.WrapObject({
+let info = XRTLibTraverse.WrapObject({
     "protocol": "SOCKS5"
 });
 console.log(info.sub("protocol").selectFromObject({
@@ -461,7 +461,7 @@ Iterate an object.
 
 <u>Example</u>:
 ```
-var info = XRTLibTraverse.WrapObject({
+let info = XRTLibTraverse.WrapObject({
     "a": 1,
     "b": 2,
     "c": 3
@@ -492,7 +492,7 @@ Iterate an object (will callback with key parameter).
 
 <u>Example</u>:
 ```
-var info = XRTLibTraverse.WrapObject({
+let info = XRTLibTraverse.WrapObject({
     "a": 1,
     "b": 2,
     "c": 3
@@ -524,8 +524,8 @@ Set a key-value pair within an object.
 
 <u>Example</u>:
 ```
-var data = {};
-var info = XRTLibTraverse.WrapObject(data, false);
+let data = {};
+let info = XRTLibTraverse.WrapObject(data, false);
 info.objectSet("key", "value");
 console.log(data);   //  Output: {"key": "value"}
 ```
@@ -547,8 +547,8 @@ Get whether an object has specified key.
 
 <u>Example</u>:
 ```
-var data = {"a": 1234, "c": 5678};
-var info = XRTLibTraverse.WrapObject(data, false);
+let data = {"a": 1234, "c": 5678};
+let info = XRTLibTraverse.WrapObject(data, false);
 console.log(info.objectHas("a"));   //  Output: true
 console.log(info.objectHas("b"));   //  Output: false
 console.log(info.objectHas("c"));   //  Output: true
@@ -571,7 +571,7 @@ Iterate an array.
 
 <u>Example</u>:
 ```
-var info = XRTLibTraverse.WrapObject(["I", "love", "you"], false);
+let info = XRTLibTraverse.WrapObject(["I", "love", "you"], false);
 info.arrayForEach(function(item) {
     console.log(item.unwrap());
 });
@@ -598,7 +598,7 @@ Iterate an array with deletion.
 
 <u>Example</u>:
 ```
-var info = XRTLibTraverse.WrapObject(["I", "love", "you"], false);
+let info = XRTLibTraverse.WrapObject(["I", "love", "you"], false);
 info.arrayForEachWithDeletion(function(item) {
     return !(item.unwrap() == "love");
 });
@@ -660,18 +660,18 @@ Assume that the inner object is in specific selections.
 
 <u>Example</u>:
 ```
-var info = XRTLibTraverse.WrapObject("test", false);
+let info = XRTLibTraverse.WrapObject("test", false);
 
 //  Array.
 info.oneOf(["ubuntu", "test"]);   //  Nothing happened.
 
 //  Set.
-var testSet = new Set();
+let testSet = new Set();
 testSet.add("test");
 info.oneOf(testSet);              //  Nothing happened.
 
 //  Map.
-var testMap = new Map();
+let testMap = new Map();
 testMap.set("test", "value");
 info.oneOf(testMap);              //  Nothing happened.
 
@@ -703,7 +703,7 @@ Assume that the inner conforms to custom rule.
 
 <u>Example</u>:
 ```
-var info = XRTLibTraverse.WrapObject("info", false);
+let info = XRTLibTraverse.WrapObject("info", false);
 
 info.customRule(function(inner) {
     if (inner == "info") {
@@ -804,9 +804,9 @@ Wrap an object with Traverse.
 
 <u>Example</u>:
 ```
-var wrap1 = XRTLibTraverse.WrapObject({"key": "value"}, false);
-var wrap2 = XRTLibTraverse.WrapObject(wrap1, false);
-var wrap3 = XRTLibTraverse.WrapObject(wrap1, true);
+let wrap1 = XRTLibTraverse.WrapObject({"key": "value"}, false);
+let wrap2 = XRTLibTraverse.WrapObject(wrap1, false);
+let wrap3 = XRTLibTraverse.WrapObject(wrap1, true);
 
 //  Next three statements have the same output (output: "value").
 console.log(wrap1.sub("key").inner());
