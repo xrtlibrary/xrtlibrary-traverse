@@ -741,6 +741,10 @@ Unwrap the traverse object.
 
 Value comparator for traverse module.
 
+#### new Traverse.Comparator()
+
+Constructs a new object.
+
 #### comparator.eq(a, b)
 
 Get whether two values ("a" and "b") are equal.
