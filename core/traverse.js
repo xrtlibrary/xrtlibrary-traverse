@@ -830,7 +830,7 @@ function Traverse(inner, path) {
     this.range = function(
         minValue, 
         maxValue, 
-        comparator = comparator = Traverse.DEFAULT_COMPARATOR
+        comparator = Traverse.DEFAULT_COMPARATOR
     ) {
         return self.min(minValue, comparator).max(maxValue, comparator);
     };
