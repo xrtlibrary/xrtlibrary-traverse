@@ -1102,6 +1102,221 @@ function Traverse(inner, path) {
     };
 
     /**
+     *  Get the length of an array.
+     * 
+     *  Exception(s):
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
+     * 
+     *          - The inner object is NULL.
+     *          - The inner object is not an array.
+     * 
+     *  @return {Number} - The length.
+     */
+    this.arrayLength = function() {
+        //  Check type.
+        self.notNull().typeOf(Array);
+
+        return inner.length;
+    };
+
+    /**
+     *  Get an item from an array.
+     * 
+     *  Exception(s):
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
+     * 
+     *          - The inner object is NULL.
+     *          - The inner object is not an array.
+     * 
+     *    [2] Traverse.ParameterError:
+     *        Raised if 'offset' is not an integer.
+     * 
+     *    [3] Traverse.IndexOutOfRangeError:
+     *        Raised if 'offset' is out of range.
+     * 
+     *  @param {Number} offset
+     *      - The offset of the item within the array.
+     *  @return {Traverse} 
+     *      - Traverse object of the item.
+     */
+    this.arrayGetItem = function(offset) {
+        //  Check type.
+        self.notNull().typeOf(Array);
+
+        //  Check the offset.
+        if (!Number.isInteger(offset)) {
+            throw new Traverse.ParameterError("Offset must be an integer.");
+        }
+        if (offset < 0 || offset >= inner.length) {
+            throw new Traverse.IndexOutOfRangeError("Offset is out of range.");
+        }
+
+        //  Get the item.
+        return new Traverse(
+            inner[offset],
+            _GetSubPath(Util.format("[%d]", offset))
+        );
+    };
+
+    /**
+     *  Set an item from an array.
+     * 
+     *  Exception(s):
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
+     * 
+     *          - The inner object is NULL.
+     *          - The inner object is not an array.
+     * 
+     *    [2] Traverse.ParameterError:
+     *        Raised if 'offset' is not an integer.
+     * 
+     *    [3] Traverse.IndexOutOfRangeError:
+     *        Raised if 'offset' is out of range.
+     * 
+     *  @param {Number} offset
+     *      - The offset of the item within the array.
+     *  @param {*} value
+     *      - The item value.
+     *  @return {Traverse} 
+     *      - Self.
+     */
+    this.arraySetItem = function(offset, value) {
+        //  Check type.
+        self.notNull().typeOf(Array);
+
+        //  Check the offset.
+        if (!Number.isInteger(offset)) {
+            throw new Traverse.ParameterError("Offset must be an integer.");
+        }
+        if (offset < 0 || offset >= inner.length) {
+            throw new Traverse.IndexOutOfRangeError("Offset is out of range.");
+        }
+
+        //  Set the item.
+        inner[offset] = value;
+
+        return self;
+    };
+
+    /**
+     *  Push an item to an array.
+     * 
+     *  Exception(s):
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
+     * 
+     *          - The inner object is NULL.
+     *          - The inner object is not an array.
+     * 
+     *  @param {*} value
+     *      - The item value.
+     *  @return {Traverse}
+     *      - Self.
+     */
+    this.arrayPushItem = function(value) {
+        //  Check type.
+        self.notNull().typeOf(Array);
+
+        //  Push the item.
+        inner.push(value);
+
+        return self;
+    };
+
+    /**
+     *  Pop an item from an array.
+     * 
+     *  Exception(s):
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
+     * 
+     *          - The inner object is NULL.
+     *          - The inner object is not an array.
+     * 
+     *    [3] Traverse.IndexOutOfRangeError:
+     *        Raised if the array is already empty.
+     * 
+     *  @return {Traverse}
+     *      - Traverse object of the popped item.
+     */
+    this.arrayPopItem = function() {
+        //  Check type.
+        self.notNull().typeOf(Array);
+
+        //  Check the array.
+        if (inner.length == 0) {
+            throw new Traverse.IndexOutOfRangeError("Array is empty.");
+        }
+
+        //  Pop an item.
+        let item = inner.pop();
+        return new Traverse(
+            item,
+            _GetSubPath(Util.format("[%d]", inner.length))
+        );
+    };
+
+    /**
+     *  Shift an item from an array.
+     * 
+     *  Exception(s):
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
+     * 
+     *          - The inner object is NULL.
+     *          - The inner object is not an array.
+     * 
+     *    [3] Traverse.IndexOutOfRangeError:
+     *        Raised if the array is already empty.
+     * 
+     *  @return {Traverse}
+     *      - Traverse object of the shifted item.
+     */
+    this.arrayShiftItem = function() {
+        //  Check type.
+        self.notNull().typeOf(Array);
+
+        //  Check the array.
+        if (inner.length == 0) {
+            throw new Traverse.IndexOutOfRangeError("Array is empty.");
+        }
+
+        //  Shift an item.
+        return new Traverse(
+            inner.shift(),
+            _GetSubPath("[0]")
+        );
+    };
+
+    /**
+     *  Unshift an item to an array.
+     * 
+     *  Exception(s):
+     *    [1] Traverse.TypeError: 
+     *        Raised in following situations:
+     * 
+     *          - The inner object is NULL.
+     *          - The inner object is not an array.
+     * 
+     *  @param {*} value
+     *      - The item value.
+     *  @return {Traverse}
+     *      - Self.
+     */
+    this.arrayUnshiftItem = function(item) {
+        //  Check type.
+        self.notNull().typeOf(Array);
+
+        //  Unshift the item.
+        inner.unshift(item);
+
+        return self;
+    };
+
+    /**
      *  Iterate an array.
      * 
      *  Exception(s):

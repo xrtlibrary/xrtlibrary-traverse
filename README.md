@@ -563,6 +563,147 @@ console.log(info.objectHas("b"));   //  Output: false
 console.log(info.objectHas("c"));   //  Output: true
 ```
 
+#### traverse.arrayLength()
+
+Get the length of an array.
+
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an array.
+
+<u>Return value</u>:
+ - (*Number*) The length.
+
+#### traverse.arrayGetItem(offset)
+
+Get an item from an array.
+
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an array.
+ - *Traverse.ParameterError*: Raised if *offset* is not an integer.
+ - *Traverse.IndexOutOfRangeError*: Raised if *offset* is out of range.
+
+<u>Parameter(s)</u>:
+ - offset (*Number*): The offset of the item within the array.
+
+<u>Return value</u>:
+ - (*Traverse*) Traverse object of the item.
+
+#### traverse.arraySetItem(offset, value)
+
+Set an item from an array.
+
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an array.
+ - *Traverse.ParameterError*: Raised if *offset* is not an integer.
+ - *Traverse.IndexOutOfRangeError*: Raised if *offset* is out of range.
+
+<u>Parameter(s)</u>:
+ - offset (*Number*): The offset of the item within the array.
+ - value (*\**): The item value.
+
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
+
+#### traverse.arrayPushItem(value)
+
+Push an item to an array.
+
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an array.
+
+<u>Parameter(s)</u>:
+ - value (*\**): The item value.
+
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
+
+<u>Example</u>:
+
+```
+let nums = XRTLibTraverse.WrapObject([], false);
+for (let i = 1; i <= 3; ++i) {
+    nums.arrayPushItem(i);
+}
+console.log(nums.unwrap());
+//  Output: [1, 2, 3]
+```
+
+#### traverse.arrayPopItem()
+
+Pop an item from an array.
+
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an array.
+ - *Traverse.IndexOutOfRangeError*: Raised if the array is already empty.
+
+<u>Return value</u>:
+ - (*Traverse*) Traverse object of the popped item.
+
+```
+let nums = XRTLibTraverse.WrapObject([1, 2, 3], false);
+for (let i = 1; i <= 3; ++i) {
+    console.log(nums.arrayPopItem().unwrap());
+}
+//  Output: 3, 2, 1
+```
+
+#### traverse.arrayShiftItem()
+
+Shift an item from an array.
+
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an array.
+ - *Traverse.IndexOutOfRangeError*: Raised if the array is already empty.
+
+<u>Return value</u>:
+ - (*Traverse*) Traverse object of the shifted item.
+
+```
+let nums = XRTLibTraverse.WrapObject([1, 2, 3], false);
+for (let i = 1; i <= 3; ++i) {
+    console.log(nums.arrayShiftItem().unwrap());
+}
+//  Output: 1, 2, 3
+```
+
+#### traverse.arrayUnshiftItem(value)
+
+Unshift an item to an array.
+
+<u>Exception(s)</u>:
+ - *Traverse.TypeError*: Raised in following situations:
+   - The inner object is NULL.
+   - The inner object is not an array.
+
+<u>Parameter(s)</u>:
+ - value (*\**): The item value.
+
+<u>Return value</u>:
+ - (*Traverse*) Self reference.
+
+<u>Example</u>:
+
+```
+let nums = XRTLibTraverse.WrapObject([], false);
+for (let i = 1; i <= 3; ++i) {
+    nums.arrayUnshiftItem(i);
+}
+console.log(nums.unwrap());
+//  Output: [3, 2, 1]
+```
+
 #### traverse.arrayForEach(callback)
 
 Iterate an array.
