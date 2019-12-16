@@ -506,7 +506,7 @@ let info = XRTLibTraverse.WrapObject({
     "b": 2,
     "c": 3
 }, false);
-info.objectForEach(function(value, key) {
+info.objectForEachEx(function(value, key) {
     console.log(key + " => " + value.unwrap());
 });
 //  Output:
