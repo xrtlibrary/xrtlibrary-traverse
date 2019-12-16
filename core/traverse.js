@@ -948,11 +948,9 @@ function Traverse(inner, path) {
      *  Select an item from specific map (use inner object as the key).
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: 
-     *        Raised if the inner object is NULL.
-     *    [2] Traverse.KeyNotFoundError: 
+     *    [1] Traverse.KeyNotFoundError: 
      *        Raised if the key doesn't exist.
-     *    [3] Traverse.ParameterError: 
+     *    [2] Traverse.ParameterError: 
      *        Raised if the "from" parameter is not valid (not a Map object).
      * 
      *  @param {Map} from - The map.
@@ -963,9 +961,6 @@ function Traverse(inner, path) {
         if (!(from instanceof Map)) {
             throw new TraverseParameterError("Expect a map object.");
         }
-
-        //  Check inner object.
-        self.notNull();
 
         //  Check key existence.
         if (!from.has(inner)) {
@@ -986,9 +981,7 @@ function Traverse(inner, path) {
      *  Select an optional item from specific map (inner object as the key).
      * 
      *  Exception(s):
-     *    [1] Traverse.TypeError: 
-     *        Raised if the inner object is NULL.
-     *    [2] Traverse.ParameterError: 
+     *    [1] Traverse.ParameterError: 
      *        Raised if the "from" parameter is not valid (not a Map object).
      * 
      *  @param {Map} from - The map.
@@ -1014,10 +1007,7 @@ function Traverse(inner, path) {
      * 
      *  Exception(s):
      *    [1] Traverse.TypeError: 
-     *        Raised in following situations:
-     * 
-     *          - The inner object is NULL.
-     *          - The inner object is not an Object.
+     *        The inner object is not an Object.
      * 
      *  @param {(value: Traverse) => void} callback - The callback.
      *  @return {Traverse} - Self.
@@ -1033,25 +1023,24 @@ function Traverse(inner, path) {
      * 
      *  Exception(s):
      *    [1] Traverse.TypeError: 
-     *        Raised in following situations:
-     * 
-     *          - The inner object is NULL.
-     *          - The inner object is not an Object.
+     *        The inner object is not an Object.
      * 
      *  @param {(value: Traverse, key: string) => void} callback - The callback.
      *  @return {Traverse} - Self.
      */
     this.objectForEachEx = function(callback) {
-        //  Check type.
-        self.notNull().typeOf(Object);
+        if (!self.isNull()) {
+            //  Check type.
+            self.typeOf(Object);
 
-        //  Scan all keys.
-        for (let key in inner) {
-            callback.call(
-                self, 
-                new Traverse(inner[key], _GetSubPath(key)), 
-                key
-            );
+            //  Scan all keys.
+            for (let key in inner) {
+                callback.call(
+                    self, 
+                    new Traverse(inner[key], _GetSubPath(key)), 
+                    key
+                );
+            }
         }
 
         return self;
@@ -1062,21 +1051,20 @@ function Traverse(inner, path) {
      * 
      *  Exception(s):
      *    [1] Traverse.TypeError: 
-     *        Raised in following situations:
-     * 
-     *          - The inner object is NULL.
-     *          - The inner object is not an Object.
+     *        The inner object is not an Object.
      * 
      *  @param {String} key - The key.
      *  @param {*} value - The value.
      *  @return {Traverse} - Self.
      */
     this.objectSet = function(key, value) {
-        //  Check type.
-        self.notNull().typeOf(Object);
-
-        //  Set the key pair.
-        inner[key] = value;
+        if (!self.isNull()) {
+            //  Check type.
+            self.typeOf(Object);
+    
+            //  Set the key pair.
+            inner[key] = value;
+        }
 
         return self;
     };
@@ -1165,10 +1153,7 @@ function Traverse(inner, path) {
      * 
      *  Exception(s):
      *    [1] Traverse.TypeError: 
-     *        Raised in following situations:
-     * 
-     *          - The inner object is NULL.
-     *          - The inner object is not an array.
+     *        The inner object is not an array.
      * 
      *    [2] Traverse.ParameterError:
      *        Raised if 'offset' is not an integer.
@@ -1184,9 +1169,6 @@ function Traverse(inner, path) {
      *      - Self.
      */
     this.arraySetItem = function(offset, value) {
-        //  Check type.
-        self.notNull().typeOf(Array);
-
         //  Check the offset.
         if (!Number.isInteger(offset)) {
             throw new Traverse.ParameterError("Offset must be an integer.");
@@ -1195,8 +1177,13 @@ function Traverse(inner, path) {
             throw new Traverse.IndexOutOfRangeError("Offset is out of range.");
         }
 
-        //  Set the item.
-        inner[offset] = value;
+        if (!self.notNull()) {
+            //  Check type.
+            self.typeOf(Array);
+
+            //  Set the item.
+            inner[offset] = value;
+        }
 
         return self;
     };
@@ -1206,10 +1193,7 @@ function Traverse(inner, path) {
      * 
      *  Exception(s):
      *    [1] Traverse.TypeError: 
-     *        Raised in following situations:
-     * 
-     *          - The inner object is NULL.
-     *          - The inner object is not an array.
+     *        The inner object is not an array.
      * 
      *  @param {*} value
      *      - The item value.
@@ -1217,11 +1201,13 @@ function Traverse(inner, path) {
      *      - Self.
      */
     this.arrayPushItem = function(value) {
-        //  Check type.
-        self.notNull().typeOf(Array);
+        if (!self.isNull()) {
+            //  Check type.
+            self.typeOf(Array);
 
-        //  Push the item.
-        inner.push(value);
+            //  Push the item.
+            inner.push(value);
+        }
 
         return self;
     };
@@ -1296,10 +1282,7 @@ function Traverse(inner, path) {
      * 
      *  Exception(s):
      *    [1] Traverse.TypeError: 
-     *        Raised in following situations:
-     * 
-     *          - The inner object is NULL.
-     *          - The inner object is not an array.
+     *        The inner object is not an array.
      * 
      *  @param {*} value
      *      - The item value.
@@ -1307,11 +1290,13 @@ function Traverse(inner, path) {
      *      - Self.
      */
     this.arrayUnshiftItem = function(item) {
-        //  Check type.
-        self.notNull().typeOf(Array);
+        if (!self.isNull()) {
+            //  Check type.
+            self.typeOf(Array);
 
-        //  Unshift the item.
-        inner.unshift(item);
+            //  Unshift the item.
+            inner.unshift(item);
+        }
 
         return self;
     };
@@ -1321,24 +1306,23 @@ function Traverse(inner, path) {
      * 
      *  Exception(s):
      *    [1] Traverse.TypeError: 
-     *        Raised in following situations:
-     * 
-     *          - The inner object is NULL.
-     *          - The inner object is not an array.
+     *        The inner object is not an array.
      * 
      *  @param {(item: Traverse) => void} callback - The callback.
      *  @return {Traverse} - Self.
      */
     this.arrayForEach = function(callback) {
-        //  Check type.
-        self.notNull().typeOf(Array);
+        if (!self.isNull()) {
+            //  Check type.
+            self.typeOf(Array);
 
-        //  Scan all items.
-        for (let i = 0; i < inner.length; ++i) {
-            callback.call(self, new Traverse(
-                inner[i], 
-                _GetSubPath(Util.format("[%d]", i))
-            ));
+            //  Scan all items.
+            for (let i = 0; i < inner.length; ++i) {
+                callback.call(self, new Traverse(
+                    inner[i], 
+                    _GetSubPath(Util.format("[%d]", i))
+                ));
+            }
         }
 
         return self;
@@ -1349,10 +1333,7 @@ function Traverse(inner, path) {
      * 
      *  Exception(s):
      *    [1] Traverse.TypeError: 
-     *        Raised in following situations:
-     * 
-     *          - The inner object is NULL.
-     *          - The inner object is not an array.
+     *        The inner object is not an array.
      * 
      *  Note(s):
      *    [1] If the callback returns true, the item would be deleted.
@@ -1361,23 +1342,25 @@ function Traverse(inner, path) {
      *  @return {Traverse} - Self.
      */
     this.arrayForEachWithDeletion = function(callback) {
-        //  Check type.
-        self.notNull().typeOf(Array);
+        if (!self.isNull()) {
+            //  Check type.
+            self.typeOf(Array);
 
-        //  Scan all items.
-        let cursor = 0;
-        while (cursor < inner.length) {
-            let isDelete = callback.call(
-                self, 
-                new Traverse(
-                    inner[cursor], 
-                    _GetSubPath(Util.format("[%d]", cursor))
-                )
-            );
-            if (isDelete) {
-                inner.splice(cursor, 1);
-            } else {
-                ++cursor;
+            //  Scan all items.
+            let cursor = 0;
+            while (cursor < inner.length) {
+                let isDelete = callback.call(
+                    self, 
+                    new Traverse(
+                        inner[cursor], 
+                        _GetSubPath(Util.format("[%d]", cursor))
+                    )
+                );
+                if (isDelete) {
+                    inner.splice(cursor, 1);
+                } else {
+                    ++cursor;
+                }
             }
         }
 
@@ -1389,10 +1372,7 @@ function Traverse(inner, path) {
      * 
      *  Exception(s):
      *    [1] Traverse.TypeError: 
-     *        Raised in following situations:
-     * 
-     *          - The inner object is NULL.
-     *          - The inner object is not an array.
+     *        The inner object is not an array.
      * 
      *    [2] Traverse.SizeError: 
      *        Raised if the array size exceeds.
@@ -1401,19 +1381,21 @@ function Traverse(inner, path) {
      *  @return {Traverse} - Self.
      */
     this.arrayMinLength = function(minLength) {
-        //  Check type.
-        self.notNull().typeOf(Array);
+        if (!self.isNull()) {
+            //  Check type.
+            self.typeOf(Array);
 
-        //  Check array length.
-        let currentLength = inner.length;
-        if (currentLength < minLength) {
-            throw new TraverseSizeError(Util.format(
-                "Array should have at least %d item(s) (path=\"%s\", " + 
-                "current=%d).",
-                minLength,
-                path,
-                currentLength
-            ));
+            //  Check array length.
+            let currentLength = inner.length;
+            if (currentLength < minLength) {
+                throw new TraverseSizeError(Util.format(
+                    "Array should have at least %d item(s) (path=\"%s\", " + 
+                    "current=%d).",
+                    minLength,
+                    path,
+                    currentLength
+                ));
+            }    
         }
 
         return self;
@@ -1424,10 +1406,7 @@ function Traverse(inner, path) {
      * 
      *  Exception(s):
      *    [1] Traverse.TypeError: 
-     *        Raised in following situations:
-     * 
-     *          - The inner object is NULL.
-     *          - The inner object is not an array.
+     *        The inner object is not an array.
      * 
      *    [2] Traverse.SizeError: 
      *        Raised if the array size exceeds.
@@ -1436,19 +1415,21 @@ function Traverse(inner, path) {
      *  @return {Traverse} - Self.
      */
     this.arrayMaxLength = function(maxLength) {
-        //  Check type.
-        self.notNull().typeOf(Array);
+        if (!self.isNull()) {
+            //  Check type.
+            self.typeOf(Array);
 
-        //  Check array length.
-        let currentLength = inner.length;
-        if (currentLength > maxLength) {
-            throw new TraverseSizeError(Util.format(
-                "Array should have at most %d item(s) (path=\"%s\", " + 
-                "current=%d).",
-                maxLength,
-                path,
-                currentLength
-            ));
+            //  Check array length.
+            let currentLength = inner.length;
+            if (currentLength > maxLength) {
+                throw new TraverseSizeError(Util.format(
+                    "Array should have at most %d item(s) (path=\"%s\", " + 
+                    "current=%d).",
+                    maxLength,
+                    path,
+                    currentLength
+                ));
+            }
         }
 
         return self;

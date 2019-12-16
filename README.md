@@ -428,7 +428,6 @@ Select an optional item from specific object (inner object as the key).
 Select an item from specific map (inner object as the key).
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised if the inner object is NULL.
  - *Traverse.KeyNotFoundError*: Raised if the key doesn't exist.
  - *Traverse.ParameterError*: Raised if the "from" parameter is not valid (not a Map object).
 
@@ -443,7 +442,6 @@ Select an item from specific map (inner object as the key).
 Select an optional item from specific map (inner object as the key).
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised if the inner object is NULL.
  - *Traverse.ParameterError*: Raised if the "from" parameter is not valid (not a Map object).
 
 <u>Parameter(s)</u>:
@@ -458,9 +456,7 @@ Select an optional item from specific map (inner object as the key).
 Iterate an object.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
-   - The inner object is NULL.
-   - The inner object is not an Object.
+ - *Traverse.TypeError*: The inner object is not an Object.
 
 <u>Parameter(s)</u>:
  - callback (*(value: Traverse) => void*): The callback.
@@ -489,9 +485,7 @@ info.objectForEach(function(value) {
 Iterate an object (will callback with key parameter).
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
-   - The inner object is NULL.
-   - The inner object is not an Object.
+ - *Traverse.TypeError*: The inner object is not an Object.
 
 <u>Parameter(s)</u>:
  - callback (*(value: Traverse, key: string) => void*): The callback.
@@ -520,9 +514,7 @@ info.objectForEachEx(function(value, key) {
 Set a key-value pair within an object.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
-   - The inner object is NULL.
-   - The inner object is not an Object.
+ - *Traverse.TypeError*: The inner object is not an Object.
 
 <u>Parameter(s)</u>:
  - key (*String*): The key.
@@ -597,9 +589,7 @@ Get an item from an array.
 Set an item from an array.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
-   - The inner object is NULL.
-   - The inner object is not an array.
+ - *Traverse.TypeError*: The inner object is not an array.
  - *Traverse.ParameterError*: Raised if *offset* is not an integer.
  - *Traverse.IndexOutOfRangeError*: Raised if *offset* is out of range.
 
@@ -615,9 +605,7 @@ Set an item from an array.
 Push an item to an array.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
-   - The inner object is NULL.
-   - The inner object is not an array.
+ - *Traverse.TypeError*: The inner object is not an array.
 
 <u>Parameter(s)</u>:
  - value (*\**): The item value.
@@ -683,9 +671,7 @@ for (let i = 1; i <= 3; ++i) {
 Unshift an item to an array.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
-   - The inner object is NULL.
-   - The inner object is not an array.
+ - *Traverse.TypeError*: The inner object is not an array.
 
 <u>Parameter(s)</u>:
  - value (*\**): The item value.
@@ -709,9 +695,7 @@ console.log(nums.unwrap());
 Iterate an array.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
-   - The inner object is NULL.
-   - The inner object is not an array.
+ - *Traverse.TypeError*: The inner object is not an array.
 
 <u>Parameter(s)</u>:
  - callback (*(item: Traverse) => void*): The callback.
@@ -733,9 +717,7 @@ info.arrayForEach(function(item) {
 Iterate an array with deletion.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
-   - The inner object is NULL.
-   - The inner object is not an array.
+ - *Traverse.TypeError*: The inner object is not an array.
 
 <u>Parameter(s)</u>:
  - callback (*(item: Traverse) => Boolean*): The callback.
@@ -760,9 +742,7 @@ console.log(info.unwrap());  //  Output: ["love"]
 Assume the array has a minimum length.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
-   - The inner object is NULL.
-   - The inner object is not an array.
+ - *Traverse.TypeError*: The inner object is not an array.
  - *Traverse.SizeError*: Raised if the array size exceeds.
 
 <u>Parameter(s)</u>:
@@ -776,9 +756,7 @@ Assume the array has a minimum length.
 Assume the array has a maximum length.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
-   - The inner object is NULL.
-   - The inner object is not an array.
+ - *Traverse.TypeError*: The inner object is not an array.
  - *Traverse.SizeError*: Raised if the array size exceeds.
 
 <u>Parameter(s)</u>:
