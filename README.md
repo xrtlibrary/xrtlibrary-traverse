@@ -68,8 +68,8 @@ Traverse helper.
 Check the type of inner object.
 
 <u>Exception(s)</u>:
- - *Traverse.ParameterError*: Raised if the constructor is not valid.
- - *Traverse.TypeError*: Raised if the inner object is not constructed by the constructor.
+ - *Traverse.ParameterError*: The constructor is not valid.
+ - *Traverse.TypeError*: The inner object is not constructed by the constructor.
 
 <u>Parameter(s)</u>:
  - constructor (*{new(...args: any[]): object}*): The constructor of the type.
@@ -82,7 +82,7 @@ Check the type of inner object.
 Assume that the inner object is numeric.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised if the inner object is not numeric.
+ - *Traverse.TypeError*: The inner object is not numeric.
 
 <u>Return value</u>:
  - (*Traverse*) Self reference.
@@ -92,7 +92,7 @@ Assume that the inner object is numeric.
 Assume that the inner object is an integer.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised if the inner object is not an integer.
+ - *Traverse.TypeError*: The inner object is not an integer.
 
 <u>Return value</u>:
  - (*Traverse*) Self reference.
@@ -102,7 +102,7 @@ Assume that the inner object is an integer.
 Assume that the inner object is a boolean.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised if the inner object is not boolean.
+ - *Traverse.TypeError*: The inner object is not boolean.
 
 <u>Return value</u>:
  - (*Traverse*) Self reference.
@@ -112,7 +112,7 @@ Assume that the inner object is a boolean.
 Assume that the inner object is a string.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised if the inner object is not string.
+ - *Traverse.TypeError*: The inner object is not string.
 
 <u>Return value</u>:
  - (*Traverse*) Self reference.
@@ -122,9 +122,9 @@ Assume that the inner object is a string.
 Validate the string by given character table.
 
 <u>Exception(s)</u>:
- - *Traverse.ParameterError*: Raised if the character table is not string.
- - *Traverse.FormatError*: Raised when the inner string mismatched with the character table.
- - *Traverse.TypeError*: Raised when the inner object is not string.
+ - *Traverse.ParameterError*: The character table is not string.
+ - *Traverse.FormatError*: The inner string mismatched with the character table.
+ - *Traverse.TypeError*: The inner object is not string.
 
 <u>Parameter(s)</u>:
  - charTable (*String*): The character table.
@@ -137,9 +137,9 @@ Validate the string by given character table.
 Validate the string by given regular expression.
 
 <u>Exception(s)</u>:
- - *Traverse.ParameterError*: Raised if the "re" parameter is not a RegExp object.
- - *Traverse.FormatError*: Raised when the inner string mismatched with the regular expression.
- - *Traverse.TypeError*: Raised if the inner object is not string.
+ - *Traverse.ParameterError*: The "re" parameter is not a RegExp object.
+ - *Traverse.FormatError*: The inner string mismatched with the regular expression.
+ - *Traverse.TypeError*: The inner object is not string.
 
 <u>Parameter(s)</u>:
  - re (*RegExp*): The regular expression.
@@ -152,8 +152,8 @@ Validate the string by given regular expression.
 Load JSON object from current inner object (a string).
 
 <u>Exception(s)</u>:
- - *Traverse.ParseError*: Raised when the failed to parse the JSON object.
- - *Traverse.TypeError*: Raised if the inner object is not string.
+ - *Traverse.ParseError*: Failed to parse the JSON object.
+ - *Traverse.TypeError*: The inner object is not string.
 
 <u>Return value</u>:
  - (*Traverse*) The parsed JSON object wrapped with *Traverse*.
@@ -170,8 +170,8 @@ console.log(info.notNull().string().jsonLoad().sub("key").unwrap());  //  Output
 Save JSON object to a new Traverse object.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised when cyclic object value was found.
- - *Traverse.Error*: Raised when other JSON serialization error occurred.
+ - *Traverse.TypeError*: Cyclic object value was found.
+ - *Traverse.Error*: Other JSON serialization error occurred.
 
 <u>Return value</u>:
  - (*Traverse*) The serialized JSON string wrapped with Traverse.
@@ -188,11 +188,11 @@ console.log(info.jsonSave().unwrap());     //  Output: "{\"key\": \"value\"}".
 Go to sub directory.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in one of following situations:
+ - *Traverse.TypeError*: One of following conditions:
    - The inner object is NULL.
    - The inner object is not an Object or a Map object.
- - *Traverse.ParameterError*: Raised if the "name" parameter is not a string and the inner object is a Object.
- - *Traverse.KeyNotFoundError*: Raised if the sub path can't be found.
+ - *Traverse.ParameterError*: The "name" parameter is not a string and the inner object is an Object.
+ - *Traverse.KeyNotFoundError*: The sub path can't be found.
 
 <u>Parameter(s)</u>:
  - name (*): The name(key) of sub directory.
@@ -218,10 +218,10 @@ console.log(info.sub("a").sub("b").unwrap());  //  Output: "c".
 Go to sub directory which can be non-existed.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in one of following situations:
+ - *Traverse.TypeError*: One of following conditions:
    - The inner object is NULL.
    - The inner object is not an Object or a Map object.
- - *Traverse.ParameterError*: Raised if the "name" parameter is not a string and the inner object is a Object.
+ - *Traverse.ParameterError*: The "name" parameter is not a string and the inner object is a Object.
 
 <u>Parameter(s)</u>:
  - name (*): The name(key) of sub directory.
@@ -242,7 +242,7 @@ console.log(info.optionalSub("b", "non-exist").unwrap());  //  Output: "non-exis
 Assume that the inner object is not NULL.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised when the inner object is NULL.
+ - *Traverse.TypeError*: The inner object is NULL.
 
 <u>Return value</u>:
  - (*Traverse*) Self reference.
@@ -255,8 +255,8 @@ Give minimum value threshold to the inner object.
  - inner >= threshold
 
 <u>Exception(s)</u>:
- - *Traverse.ParameterError*: Raised if the type of the inner object is different to the threshold object.
- - *Traverse.ValueOutOfRangeError*: Raised if the value is not within the threshold.
+ - *Traverse.ParameterError*: The type of the inner object is different to the threshold object.
+ - *Traverse.ValueOutOfRangeError*: The value is not within the threshold.
 
 <u>Parameter(s)</u>:
  - threshold (*): The threshold.
@@ -280,8 +280,8 @@ Give exclusive minimum value threshold to the inner object.
  - inner > threshold
 
 <u>Exception(s)</u>:
- - *Traverse.ParameterError*: Raised if the type of the inner object is different to the threshold object.
- - *Traverse.ValueOutOfRangeError*: Raised if the value is not within the threshold.
+ - *Traverse.ParameterError*: The type of the inner object is different to the threshold object.
+ - *Traverse.ValueOutOfRangeError*: The value is not within the threshold.
 
 <u>Parameter(s)</u>:
  - threshold (*): The threshold.
@@ -298,8 +298,8 @@ Give maximum value threshold to the inner object.
  - inner <= threshold
 
 <u>Exception(s)</u>:
- - *Traverse.ParameterError*: Raised if the type of the inner object is different to the threshold object.
- - *Traverse.ValueOutOfRangeError*: Raised if the value is not within the threshold.
+ - *Traverse.ParameterError*: The type of the inner object is different to the threshold object.
+ - *Traverse.ValueOutOfRangeError*: The value is not within the threshold.
 
 <u>Parameter(s)</u>:
  - threshold (*): The threshold.
@@ -323,8 +323,8 @@ Give exclusive maximum value threshold to the inner object.
  - inner < threshold
 
 <u>Exception(s)</u>:
- - *Traverse.ParameterError*: Raised if the type of the inner object is different to the threshold object.
- - *Traverse.ValueOutOfRangeError*: Raised if the value is not within the threshold.
+ - *Traverse.ParameterError*: The type of the inner object is different to the threshold object.
+ - *Traverse.ValueOutOfRangeError*: The value is not within the threshold.
 
 <u>Parameter(s)</u>:
  - threshold (*): The threshold.
@@ -341,8 +341,8 @@ Give value threshold to the inner object.
  - min <= inner <= max
 
 <u>Exception(s)</u>:
- - *Traverse.ParameterError*: Raised if the type of the inner object is different to the threshold objects.
- - *Traverse.ValueOutOfRangeError*: Raised if the value is not within the thresholds.
+ - *Traverse.ParameterError*: The type of the inner object is different to the threshold objects.
+ - *Traverse.ValueOutOfRangeError*: The value is not within the thresholds.
 
 <u>Parameter(s)</u>:
  - minValue (*): The minimum threshold.
@@ -357,11 +357,11 @@ Give value threshold to the inner object.
 Select an item from specific array (inner object as the index).
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
+ - *Traverse.TypeError*: One of following conditions:
    - The inner object is NULL.
    - The inner object is not an integer.
- - *Traverse.IndexOutOfRangeError*: Raised if the index out of range.
- - *Traverse.ParameterError*: Raised if the "from" parameter is not valid (not an array).
+ - *Traverse.IndexOutOfRangeError*: The index out of range.
+ - *Traverse.ParameterError*: The "from" parameter is not valid (not an array).
 
 <u>Parameter(s)</u>:
  - from (*Array*): The array.
@@ -385,10 +385,10 @@ console.log(info.sub("index2").selectFromArray(info.sub("array").unwrap()).unwra
 Select an item from specific object (inner object as the key).
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
+ - *Traverse.TypeError*: One of following conditions:
    - The inner object is NULL.
    - The inner object is not an integer.
- - *Traverse.KeyNotFoundError*: Raised if the key doesn't exist.
+ - *Traverse.KeyNotFoundError*: The key doesn't exist.
 
 <u>Parameter(s)</u>:
  - from (*Object*): The object.
@@ -412,7 +412,7 @@ console.log(info.sub("protocol").selectFromObject({
 Select an optional item from specific object (inner object as the key).
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
+ - *Traverse.TypeError*: One of following conditions:
    - The inner object is NULL.
    - The inner object is not an integer.
 
@@ -428,8 +428,8 @@ Select an optional item from specific object (inner object as the key).
 Select an item from specific map (inner object as the key).
 
 <u>Exception(s)</u>:
- - *Traverse.KeyNotFoundError*: Raised if the key doesn't exist.
- - *Traverse.ParameterError*: Raised if the "from" parameter is not valid (not a Map object).
+ - *Traverse.KeyNotFoundError*: The key doesn't exist.
+ - *Traverse.ParameterError*: The "from" parameter is not valid (not a Map object).
 
 <u>Parameter(s)</u>:
  - from (Map): The map.
@@ -442,7 +442,7 @@ Select an item from specific map (inner object as the key).
 Select an optional item from specific map (inner object as the key).
 
 <u>Exception(s)</u>:
- - *Traverse.ParameterError*: Raised if the "from" parameter is not valid (not a Map object).
+ - *Traverse.ParameterError*: The "from" parameter is not valid (not a Map object).
 
 <u>Parameter(s)</u>:
  - from (*Map*): The map.
@@ -482,7 +482,7 @@ info.objectForEach(function(value) {
 
 #### traverse.objectForEachEx(callback)
 
-Iterate an object (will callback with key parameter).
+Iterate an object (will callback with both key and value).
 
 <u>Exception(s)</u>:
  - *Traverse.TypeError*: The inner object is not an Object.
@@ -536,7 +536,7 @@ console.log(data);   //  Output: {"key": "value"}
 Get whether an object has specified key.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
+ - *Traverse.TypeError*: One of following conditions:
    - The inner object is NULL.
    - The inner object is not an Object.
 
@@ -560,7 +560,7 @@ console.log(info.objectHas("c"));   //  Output: true
 Get the length of an array.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
+ - *Traverse.TypeError*: One of following conditions:
    - The inner object is NULL.
    - The inner object is not an array.
 
@@ -572,11 +572,11 @@ Get the length of an array.
 Get an item from an array.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
+ - *Traverse.TypeError*: One of following conditions:
    - The inner object is NULL.
    - The inner object is not an array.
- - *Traverse.ParameterError*: Raised if *offset* is not an integer.
- - *Traverse.IndexOutOfRangeError*: Raised if *offset* is out of range.
+ - *Traverse.ParameterError*: *offset* is not an integer.
+ - *Traverse.IndexOutOfRangeError*: *offset* is out of range.
 
 <u>Parameter(s)</u>:
  - offset (*Number*): The offset of the item within the array.
@@ -590,8 +590,8 @@ Set an item from an array.
 
 <u>Exception(s)</u>:
  - *Traverse.TypeError*: The inner object is not an array.
- - *Traverse.ParameterError*: Raised if *offset* is not an integer.
- - *Traverse.IndexOutOfRangeError*: Raised if *offset* is out of range.
+ - *Traverse.ParameterError*: *offset* is not an integer.
+ - *Traverse.IndexOutOfRangeError*: *offset* is out of range.
 
 <u>Parameter(s)</u>:
  - offset (*Number*): The offset of the item within the array.
@@ -629,10 +629,10 @@ console.log(nums.unwrap());
 Pop an item from an array.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
+ - *Traverse.TypeError*: One of following conditions:
    - The inner object is NULL.
    - The inner object is not an array.
- - *Traverse.IndexOutOfRangeError*: Raised if the array is already empty.
+ - *Traverse.IndexOutOfRangeError*: The array is already empty.
 
 <u>Return value</u>:
  - (*Traverse*) Traverse object of the popped item.
@@ -650,10 +650,10 @@ for (let i = 1; i <= 3; ++i) {
 Shift an item from an array.
 
 <u>Exception(s)</u>:
- - *Traverse.TypeError*: Raised in following situations:
+ - *Traverse.TypeError*: One of following conditions:
    - The inner object is NULL.
    - The inner object is not an array.
- - *Traverse.IndexOutOfRangeError*: Raised if the array is already empty.
+ - *Traverse.IndexOutOfRangeError*: The array is already empty.
 
 <u>Return value</u>:
  - (*Traverse*) Traverse object of the shifted item.
@@ -743,7 +743,7 @@ Assume the array has a minimum length.
 
 <u>Exception(s)</u>:
  - *Traverse.TypeError*: The inner object is not an array.
- - *Traverse.SizeError*: Raised if the array size exceeds.
+ - *Traverse.SizeError*: The array size exceeds.
 
 <u>Parameter(s)</u>:
  - minLength (*Number*): The minimum length.
@@ -757,7 +757,7 @@ Assume the array has a maximum length.
 
 <u>Exception(s)</u>:
  - *Traverse.TypeError*: The inner object is not an array.
- - *Traverse.SizeError*: Raised if the array size exceeds.
+ - *Traverse.SizeError*: The array size exceeds.
 
 <u>Parameter(s)</u>:
  - maxLength (*Number*): The maximum length.
@@ -777,8 +777,8 @@ Get whether the inner object is NULL.
 Assume that the inner object is in specific selections.
 
 <u>Exception(s)</u>:
- - Traverse.ParameterError: Raised if the type of "selections" parameter is not supported.
- - Traverse.KeyNotFoundError: Raised if the item doesn't exist in the "selections".
+ - Traverse.ParameterError: The type of "selections" parameter is not supported.
+ - Traverse.KeyNotFoundError: The item doesn't exist in the "selections".
 
 <u>Parameter(s)</u>:
  - selections (*Set|Map|Array|Object*): The selections.
@@ -818,10 +818,10 @@ Assume that the inner conforms to custom rule.
  - The callback should return true if the inner conforms the custom rule.
 
 <u>Exception(s)</u>:
- - *Traverse.Parameter*: Raised in the following situations:
+ - *Traverse.Parameter*: One of following conditions:
     - The callback is not a Function.
     - The callback doesn't return a Boolean.
- - *Traverse.Error*: Raised when the callback return false.
+ - *Traverse.Error*: The callback return false.
 
 <u>Parameter(s)</u>:
  - callback (*(item: \*) => Boolean)*)

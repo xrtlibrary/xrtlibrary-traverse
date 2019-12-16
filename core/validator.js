@@ -11,9 +11,12 @@
 /**
  *  Validate a string.
  * 
- *  @param {String} text - The text.
- *  @param {String} charTable - The character table.
- *  @return {Boolean} - True if valid.
+ *  @param {String} text
+ *      - The text.
+ *  @param {String} charTable
+ *      - The character table.
+ *  @return {Boolean}
+ *      - True if valid.
  */
 function ValidateString(text, charTable) {
     for (let i = 0; i < text.length; ++i) {

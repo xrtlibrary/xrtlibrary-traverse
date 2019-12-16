@@ -11,9 +11,12 @@
 /**
  *  Check the type of an object.
  * 
- *  @param {*} instance - The object instance. 
- *  @param {*} constructor - The object constructor (type).
- *  @return {Boolean} - True if type matches.
+ *  @param {*} instance
+ *      - The object instance. 
+ *  @param {*} constructor
+ *      - The object constructor (type).
+ *  @return {Boolean}
+ *      - True if type matches.
  */
 function IsInstanceOf(instance, constructor) {
     if (
@@ -30,9 +33,12 @@ function IsInstanceOf(instance, constructor) {
 /**
  *  Get whether two objects are the same type.
  * 
- *  @param {*} instance1 - The first instance.
- *  @param {*} instance2 - The second instance.
- *  @return {Boolean} - True if types are the same.
+ *  @param {*} instance1
+ *      - The first instance.
+ *  @param {*} instance2
+ *      - The second instance.
+ *  @return {Boolean}
+ *      - True if types are the same.
  */
 function IsSameType(instance1, instance2) {
     let t1 = typeof(instance1);
