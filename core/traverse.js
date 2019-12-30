@@ -1592,12 +1592,12 @@ Traverse.Comparator = TraverseComparator;
  * 
  *  @param {*} inner
  *      - The inner object.
- *  @param {Boolean} force
+ *  @param {Boolean} [force]
  *      - Still wrap the object when the inner object is a Traverse.
  *  @return {Traverse}
  *      - The traverse object.
  */
-function WrapObject(inner, force) {
+function WrapObject(inner, force = false) {
     if ((inner instanceof Traverse) && !force) {
         return inner;
     } else {

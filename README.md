@@ -1038,13 +1038,13 @@ Traverse value out of range error.
 <u>Extend(s)</u>:
  - *Traverse.Error*
 
-### WrapObject(inner, force)
+### WrapObject(inner, [force = false])
 
 Wrap an object with Traverse.
 
 <u>Parameter(s)</u>:
  - inner (*): The inner object.
- - force (Boolean): Still wrap the object when the inner object is a Traverse.
+ - force (*Boolean*): (Optional) Still wrap the object when the inner object is a Traverse.
 
 <u>Return value</u>:
  - The traverse object.
