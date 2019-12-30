@@ -236,6 +236,10 @@ function Traverse(inner, path) {
     //  Self reference.
     let self = this;
 
+    //  Passed condition checks.
+    let pckNotNull = false;
+    let pckTypeOf = new Map();
+
     //
     //  Private methods.
     //
@@ -292,12 +296,25 @@ function Traverse(inner, path) {
             throw new TraverseParameterError("Not a constructor.");
         }
 
-        //  Check inner type.
-        if (inner !== null && !CrType.IsInstanceOf(inner, constructor)) {
-            throw new TraverseTypeError(Util.format(
-                "Invalid object type (path=\"%s\").",
-                path
-            ));
+        //  Try to use cache first.
+        if (pckTypeOf.has(constructor)) {
+            let passed = pckTypeOf.get(constructor);
+            if (!passed) {
+                throw new TraverseTypeError(Util.format(
+                    "Invalid object type (path=\"%s\").",
+                    path
+                ));
+            }
+        } else {
+            //  Cache missed.
+            if (inner !== null && !CrType.IsInstanceOf(inner, constructor)) {
+                pckTypeOf.set(constructor, false);
+                throw new TraverseTypeError(Util.format(
+                    "Invalid object type (path=\"%s\").",
+                    path
+                ));
+            }
+            pckTypeOf.set(constructor, true);
         }
 
         return self;
@@ -638,6 +655,11 @@ function Traverse(inner, path) {
      *      - Self.
      */
     this.notNull = function() {
+        //  Try to use cache first.
+        if (pckNotNull) {
+            return self;
+        }
+
         //  Ensure the value is not null.
         if (inner === null) {
             throw new TraverseTypeError(Util.format(
@@ -645,6 +667,9 @@ function Traverse(inner, path) {
                 path
             ));
         }
+
+        //  Write cache.
+        pckNotNull = true;
 
         return self;
     };
