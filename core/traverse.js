@@ -230,6 +230,19 @@ function TraverseComparator() {
  */
 function Traverse(inner, path) {
     //
+    //  Type definitions.
+    //
+
+    /**
+     *  @typedef {Object} TIterationCallbacks
+     *      - Iteration callbacks.
+     *  @property {() => void} stop
+     *      - Call if the application wants to stop the iteration.
+     *  @property {() => void} delete
+     *      - Call if the application wants to delete current item.
+     */
+
+    //
     //  Members.
     //
 
@@ -1323,22 +1336,70 @@ function Traverse(inner, path) {
      * 
      *  @throws {Traverse.TypeError}
      *      - The inner object is not an array.
-     *  @param {(item: Traverse) => void} callback
+     *  @param {(item: Traverse, cbs: TIterationCallbacks) => void} callback
      *      - The callback.
+     *        - "item": The traverse object that wraps the array item.
+     *        - "cbs":  An object that contains callbacks that are used to stop 
+     *                  iteration or delete current item.
+     *  @param {Boolean} [reverse]
+     *      - True if iteration direction should be inverted (from back to 
+     *        front).
      *  @return {Traverse}
      *      - Self.
      */
-    this.arrayForEach = function(callback) {
+    this.arrayForEach = function(callback, reverse = false) {
         if (!self.isNull()) {
             //  Check type.
             self.typeOf(Array);
 
+            //  Initialize iteration context.
+            let swStop = false;
+            let swDelete = false;
+
+            /**
+             *  @type {TIterationCallbacks}
+             */
+            let callbacks = {
+                "stop": function() {
+                    swStop = true;
+                },
+                "delete": function() {
+                    swDelete = true;
+                }
+            };
+
             //  Scan all items.
-            for (let i = 0; i < inner.length; ++i) {
-                callback.call(self, new Traverse(
-                    inner[i], 
-                    _GetSubPath(Util.format("[%d]", i))
-                ));
+            if (reverse) {
+                for (let cursor = inner.length - 1; cursor >= 0; --cursor) {
+                    callback.call(self, new Traverse(
+                        inner[cursor], 
+                        _GetSubPath(Util.format("[%d]", cursor))
+                    ), callbacks);
+                    if (swDelete) {
+                        inner.splice(cursor, 1);
+                        swDelete = false;
+                    }
+                    if (swStop) {
+                        break;
+                    }
+                }
+            } else {
+                let cursor = 0;
+                while (cursor < inner.length) {
+                    callback.call(self, new Traverse(
+                        inner[cursor], 
+                        _GetSubPath(Util.format("[%d]", cursor))
+                    ), callbacks);
+                    if (swDelete) {
+                        inner.splice(cursor, 1);
+                        swDelete = false;
+                    } else {
+                        ++cursor;
+                    }
+                    if (swStop) {
+                        break;
+                    }
+                }
             }
         }
 
@@ -1351,6 +1412,10 @@ function Traverse(inner, path) {
      *  Note(s):
      *    [1] If the callback returns true, the item would be deleted.
      * 
+     *  @deprecated
+     *      - Not recommended for new applications.
+     *      - Use arrayForEach() instead.
+     *      - This method would be removed totally in next major version.
      *  @throws {Traverse.TypeError}
      *      - The inner object is not an array.
      *  @param {(item: Traverse) => Boolean} callback

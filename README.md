@@ -63,6 +63,14 @@ The default value comparator used by traverse module (which uses JavaScript's "=
 
 Traverse helper.
 
+#### (Type) TIterationCallbacks -> Object
+
+Iteration callbacks.
+
+<u>Properties</u>:
+ - stop (*\(\) => void*): Call if the application wants to stop the iteration.
+ - delete (*\(\) => void*): Call if the application wants to delete current item.
+
 #### traverse.typeOf(constructor)
 
 Check the type of inner object.
@@ -690,7 +698,7 @@ console.log(nums.unwrap());
 //  Output: [3, 2, 1]
 ```
 
-#### traverse.arrayForEach(callback)
+#### traverse.arrayForEach(callback, [reverse = false])
 
 Iterate an array.
 
@@ -698,12 +706,18 @@ Iterate an array.
  - *Traverse.TypeError*: The inner object is not an array.
 
 <u>Parameter(s)</u>:
- - callback (*(item: Traverse) => void*): The callback.
+ - callback (*(item: Traverse, cbs: TIterationCallbacks) => void*): The callback.
+   - *item*: The traverse object that wraps the array item.
+   - *cbs*: An object that contains callbacks that are used to stop iteration or delete current item.
+ - reverse (*Boolean*): True if iteration direction should be inverted (from back to front).
 
 <u>Return value</u>:
  - (*Traverse*) Self reference.
 
 <u>Example</u>:
+
+A simple example that just iterates an array in normal direction:
+
 ```
 let info = XRTLibTraverse.WrapObject(["I", "love", "you"], false);
 info.arrayForEach(function(item) {
@@ -712,7 +726,70 @@ info.arrayForEach(function(item) {
 //  Output: "I", "love", "you".
 ```
 
-#### traverse.arrayForEachWithDeletion(callback)
+And you can also iterate the array in inverted (reverse) direction:
+
+```
+info.arrayForEach(function(item) {
+    console.log(item.unwrap());
+}, true /*  just set this parameter to true.  */);
+//  Output: "you", "love", "I".
+```
+
+If you want to delete any item, you can call *cbs.delete()*:
+
+```
+info.arrayForEach(function(item, cbs) {
+    let value = item.unwrap();
+    if (value == "I") {
+        cbs.delete();
+	}
+});
+console.log(info.unwrap());
+//  Output: ["love", "you"].
+```
+
+You can also stop iteration at any time by calling *cbs.stop()*:
+
+```
+//  Use the unmodified array here.
+info.arrayForEach(function(item, cbs) {
+    let value = item.unwrap();
+    if (value == "you") {
+        cbs.stop();
+        return;
+	}
+	console.log(value);
+});
+//  Output: "I", "love".
+```
+
+Use both *cbs.delete()* and *cbs.stop()* is also allowed:
+
+```
+let root = XRTLibTraverse.WrapObject([-2, -1, 0, 1, 2, 3, 4, 5], false);
+root.arrayForEach(function(item, cbs) {
+    let  value = item.notNull().integer().unwrap();
+    //  Stop if the value is non-positive.
+    if (value <= 0) {
+        cbs.stop();
+    }
+    //  Delete the item if its a even number.
+    if ((value & 1) == 0) {
+        cbs.delete();
+    }
+}, true /*  reverse  */);
+console.log(root.unwrap());
+//  Output: [-2, -1, 1, 3, 5].
+```
+
+#### ~~traverse.arrayForEachWithDeletion(callback)~~ (Deprecated)
+
+```
+This method has been deprecated. You shall:
+1. Not recommended for new applications.
+2. Use arrayForEach() instead.
+3. This method would be removed totally in next major version.
+```
 
 Iterate an array with deletion.
 
