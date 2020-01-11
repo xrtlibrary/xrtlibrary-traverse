@@ -155,6 +155,39 @@ Validate the string by given regular expression.
 <u>Return value</u>:
  - (*Traverse*) Self reference.
 
+#### traverse.stringToInteger()
+
+Convert the string to integer.
+
+<u>Note(s)</u>:
+ - Negative integer is allowed.
+ - "-0" is considered as an integer.
+ - Positive number starts with "0" is not considered as an integer.
+
+<u>Exception(s)</u>:
+ - *Traverse.FormatError*: The inner string does not represent an integer.
+ - *Traverse.TypeError*: The inner object is null or not string.
+
+<u>Return value</u>:
+ - (*Traverse*) Traverse object that wraps the converted integer object.
+
+#### traverse.stringToFloat()
+
+Convert the string to float.
+
+<u>Note(s)</u>:
+ - "-0" is considered as numeric.
+ - Floats are considered as numeric.
+ - Floats starts with "." are not considered as numeric.
+ - Positive numbers starts with "0" is not considered as numeric.
+
+<u>Exception(s)</u>:
+ - *Traverse.FormatError*: The inner string does not represent a float number.
+ - *Traverse.TypeError*: The inner object is null or not string.
+
+<u>Return value</u>:
+ - (*Traverse*) Traverse object that wraps the converted float number object.
+
 #### traverse.jsonLoad()
 
 Load JSON object from current inner object (a string).

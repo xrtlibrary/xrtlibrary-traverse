@@ -9,6 +9,7 @@
 //
 
 //  Imported modules.
+const CrTextDetector = require("./text/detector");
 const CrType = require("./type");
 const CrValidator = require("./validator");
 const Util = require("util");
@@ -471,6 +472,79 @@ function Traverse(inner, path) {
         }
 
         return self;
+    };
+
+    /**
+     *  Convert the string to integer.
+     * 
+     *  Note(s):
+     *    [1] Negative integer is allowed.
+     *    [2] "-0" is considered as an integer.
+     *    [3] Positive number starts with "0" is not considered as an integer.
+     * 
+     *  @throws {Traverse.FormatError}
+     *      - The inner string does not represent an integer.
+     *  @throws {Traverse.TypeError}
+     *      - The inner object is null or not string.
+     *  @return {Traverse}
+     *      - Traverse object that wraps the converted integer object.
+     */
+    this.stringToInteger = function() {
+        //  Check inner type.
+        self.notNull().typeOf(String);
+
+        //  Validate the string.
+        if (!CrTextDetector.IsInteger(inner)) {
+            throw new TraverseFormatError(Util.format(
+                "Not a valid integer string (path=\"%s\").",
+                path
+            ));
+        }
+
+        //  Parse the string.
+        let intValue = parseInt(inner, 10);
+
+        return new Traverse(
+            intValue,
+            _GetSubPath("[str->int]")
+        );
+    };
+
+    /**
+     *  Convert the string to float.
+     * 
+     *  Note(s):
+     *    [1] "-0" is considered as numeric.
+     *    [2] Floats are considered as numeric.
+     *    [2] Floats starts with "." are not considered as numeric.
+     *    [3] Positive numbers starts with "0" is not considered as numeric.
+     * 
+     *  @throws {Traverse.FormatError}
+     *      - The inner string does not represent a float number.
+     *  @throws {Traverse.TypeError}
+     *      - The inner object is null or not string.
+     *  @return {Traverse}
+     *      - Traverse object that wraps the converted float number object.
+     */
+    this.stringToFloat = function() {
+        //  Check inner type.
+        self.notNull().typeOf(String);
+
+        //  Validate the string.
+        if (!CrTextDetector.IsNumericStrict(inner)) {
+            throw new TraverseFormatError(Util.format(
+                "Not a valid float string (path=\"%s\").",
+                path
+            ));
+        }
+
+        //  Parse the string.
+        let floatValue = parseFloat(inner);
+
+        return new Traverse(
+            floatValue,
+            _GetSubPath("[str->float]")
+        );
     };
 
     /**
