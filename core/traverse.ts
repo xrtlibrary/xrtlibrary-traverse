@@ -9,10 +9,32 @@
 //
 
 //  Imported modules.
-const CrTextDetector = require("./text/detector");
-const CrType = require("./type");
-const CrValidator = require("./validator");
-const Util = require("util");
+import CrTextDetector = require("./text/detector");
+import CrType = require("./type");
+import CrValidator = require("./validator");
+
+//
+//  Interfaces.
+//
+
+/**
+ *  Interation callbacks.
+ */
+interface TIterationCallbacks {
+    //
+    //  Members.
+    //
+
+    /**
+     *  Call if the application wants to stop the iteration.
+     */
+    stop: () => void;
+
+    /**
+     *  Call if the application wants to delete current item.
+     */
+    delete: () => void;
+}
 
 //
 //  Classes.
@@ -20,131 +42,71 @@ const Util = require("util");
 
 /**
  *  Traverse error.
- * 
- *  @constructor
- *  @extends {Error}
- *  @param {String} [message]
- *      - The message.
  */
-function TraverseError(message = "") {
-    //  Let parent class initialize.
-    Error.call(this, message);
-    Error.captureStackTrace(this, this.constructor);
-    this.name = this.constructor.name;
-    this.message = message;
+class TraverseError extends Error {
+    //
+    //  Constructor.
+    //
+
+    /**
+     *  Constructor of the object.
+     * 
+     *  @param message 
+     *      - The message.
+     */
+    constructor(message: string = "") {
+        super(message);
+        this.message = message;
+        this.name = this.constructor.name;
+    }
 }
 
 /**
  *  Traverse parameter error.
- * 
- *  @constructor
- *  @extends {TraverseError}
- *  @param {String} [message]
- *      - The message.
  */
-function TraverseParameterError(message = "") {
-    //  Let parent class initialize.
-    TraverseError.call(this, message);
-}
+class TraverseParameterError extends TraverseError {}
 
 /**
  *  Traverse type error.
- * 
- *  @constructor
- *  @extends {TraverseError}
- *  @param {String} [message]
- *      - The message.
  */
-function TraverseTypeError(message = "") {
-    //  Let parent class initialize.
-    TraverseError.call(this, message);
-}
+class TraverseTypeError extends TraverseError {}
 
 /**
  *  Traverse format error.
- * 
- *  @constructor
- *  @extends {TraverseError}
- *  @param {String} [message]
- *      - The message.
  */
-function TraverseFormatError(message = "") {
-    //  Let parent class initialize.
-    TraverseError.call(this, message);
-}
+class TraverseFormatError extends TraverseError {}
 
 /**
  *  Traverse parse error.
- * 
- *  @constructor
- *  @extends {TraverseError}
- *  @param {String} [message]
- *      - The message.
  */
-function TraverseParseError(message = "") {
-    //  Let parent class initialize.
-    TraverseError.call(this, message);
-}
+class TraverseParseError extends TraverseError{}
 
 /**
  *  Traverse size error.
- * 
- *  @constructor
- *  @extends {TraverseError}
- *  @param {String} [message]
- *      - The message.
  */
-function TraverseSizeError(message = "") {
-    //  Let parent class initialize.
-    TraverseError.call(this, message);
-}
+class TraverseSizeError extends TraverseError {}
 
 /**
  *  Traverse key not found error.
- * 
- *  @constructor
- *  @extends {TraverseError}
- *  @param {String} [message]
- *      - The message.
  */
-function TraverseKeyNotFoundError(message = "") {
-    //  Let parent class initialize.
-    TraverseError.call(this, message);
-}
+class TraverseKeyNotFoundError extends TraverseError {}
 
 /**
  *  Traverse index out of range error.
- * 
- *  @constructor
- *  @extends {TraverseError}
- *  @param {String} [message]
- *      - The message.
  */
-function TraverseIndexOutOfRangeError(message = "") {
-    //  Let parent class initialize.
-    TraverseError.call(this, message);
-}
+class TraverseIndexOutOfRangeError extends TraverseError {}
 
 /**
  *  Traverse value out of range error.
- * 
- *  @constructor
- *  @extends {TraverseError}
- *  @param {String} [message]
- *      - The message.
  */
-function TraverseValueOutOfRangeError(message = "") {
-    //  Let parent class initialize.
-    TraverseError.call(this, message);
-}
+class TraverseValueOutOfRangeError extends TraverseError {}
 
 /**
  *  Value comparator for traverse module.
  * 
- *  @constructor
  *  @template T
  */
-function TraverseComparator() {
+class TraverseComparator<T> {
     //
     //  Public methods.
     //
@@ -156,10 +118,10 @@ function TraverseComparator() {
      *      - The value "a".
      *  @param {T} b
      *      - The value "b".
-     *  @return {Boolean}
+     *  @returns 
      *      - True if so.
      */
-    this.eq = function(a, b) {
+    public eq = function(a: T, b: T) {
         return a == b;
     };
 
@@ -170,24 +132,24 @@ function TraverseComparator() {
      *      - The value "a".
      *  @param {T} b
      *      - The value "b".
-     *  @return {Boolean}
+     *  @returns 
      *      - True if so.
      */
-    this.le = function(a, b) {
+    public le = function(a: T, b: T) {
         return a <= b;
     };
 
     /**
      *  Get whether value "a" is less than value "b".
      * 
-     *  @param {T} a
+     *  @param a
      *      - The value "a".
-     *  @param {T} b
+     *  @param b
      *      - The value "b".
-     *  @return {Boolean}
+     *  @returns 
      *      - True if so.
      */
-    this.lt = function(a, b) {
+    public lt = function(a: T, b: T) {
         return a < b;
     };
 
@@ -198,61 +160,67 @@ function TraverseComparator() {
      *      - The value "a".
      *  @param {T} b
      *      - The value "b".
-     *  @return {Boolean}
+     *  @returns
      *      - True if so.
      */
-    this.ge = function(a, b) {
+    public ge = function(a: T, b: T) {
         return a >= b;
     };
 
     /**
      *  Get whether value "a" is greater than value "b".
      * 
-     *  @param {T} a
+     *  @param a
      *      - The value "a".
-     *  @param {T} b
+     *  @param b
      *      - The value "b".
-     *  @return {Boolean}
+     *  @returns
      *      - True if so.
      */
-    this.gt = function(a, b) {
+    public gt = function(a: T, b: T) {
         return a > b;
     };
 }
 
 /**
  *  Traverse helper.
- * 
- *  @constructor
- *  @param {*} inner
- *      - The inner object.
- *  @param {String} path
- *      - The path.
  */
-function Traverse(inner, path) {
+export class Traverse {
+
     //
-    //  Type definitions.
+    //  Private members.
     //
 
     /**
-     *  @typedef {Object} TIterationCallbacks
-     *      - Iteration callbacks.
-     *  @property {() => void} stop
-     *      - Call if the application wants to stop the iteration.
-     *  @property {() => void} delete
-     *      - Call if the application wants to delete current item.
+     *  The inner object.
      */
+    private _inner: any;
 
-    //
-    //  Members.
-    //
-
-    //  Self reference.
-    let self = this;
+    /**
+     *  The path.
+     */
+    private path: string;
 
     //  Passed condition checks.
-    let pckNotNull = false;
-    let pckTypeOf = new Map();
+    private pckNotNull = false;
+    private pckTypeOf = new Map();
+
+    //
+    //  Constructor.
+    //
+
+    /**
+     *  Construct the objefct.
+     * 
+     *  @param inner 
+     *      - The inner.
+     *  @param path 
+     *      - The path.
+     */
+    constructor(inner: any, path: string) {
+        this._inner = inner;
+        this.path = path;
+    }
 
     //
     //  Private methods.
@@ -261,12 +229,12 @@ function Traverse(inner, path) {
     /**
      *  Get the representation of specified object.
      * 
-     *  @param {*} obj
+     *  @param obj
      *      - The object.
-     *  @return {String}
+     *  @returns
      *      - The representation string.
      */
-    function _GetObjectRepresentation(obj) {
+    private _GetObjectRepresentation(obj: any): string {
         try {
             return JSON.stringify(obj);
         } catch(error) {
@@ -277,14 +245,16 @@ function Traverse(inner, path) {
     /**
      *  Get the path of specific sub directory.
      * 
-     *  @param {String} name
+     *  @param name
      *      - The name of sub directory.
+     *  @returns
+     *      - The path of specific sub directory.
      */
-    function _GetSubPath(name) {
-        if (path.length == 0 || path[path.length - 1] == "/") {
-            return path + name;
+    private _GetSubPath(name: string): string {
+        if (this.path.length == 0 || this.path[this.path.length - 1] == "/") {
+            return this.path + name;
         } else {
-            return path + "/" + name;
+            return this.path + "/" + name;
         }
     }
 
@@ -299,39 +269,41 @@ function Traverse(inner, path) {
      *      - The constructor is not valid.
      *  @throws {Traverse.TypeError}
      *      - The inner object is not constructed by the constructor.
-     *  @param {{new(...args: any[]): object}} constructor
+     *  @param constructor
      *      - The constructor of the type.
-     *  @return {Traverse}
+     *  @return
      *      - Self.
      */
-    this.typeOf = function(constructor) {
+    public typeOf(constructor: any): Traverse {
         //  Check input parameter.
         if (!CrType.IsInstanceOf(constructor, Function)) {
             throw new TraverseParameterError("Not a constructor.");
         }
 
         //  Try to use cache first.
-        if (pckTypeOf.has(constructor)) {
-            let passed = pckTypeOf.get(constructor);
+        if (this.pckTypeOf.has(constructor)) {
+            let passed = this.pckTypeOf.get(constructor);
             if (!passed) {
-                throw new TraverseTypeError(Util.format(
-                    "Invalid object type (path=\"%s\").",
-                    path
-                ));
+                throw new TraverseTypeError(
+                    `Invalid object type (path=\"${this.path}\").`
+                );
             }
         } else {
             //  Cache missed.
-            if (inner !== null && !CrType.IsInstanceOf(inner, constructor)) {
-                pckTypeOf.set(constructor, false);
-                throw new TraverseTypeError(Util.format(
-                    "Invalid object type (path=\"%s\").",
-                    path
-                ));
+            if (
+                this._inner !== null && 
+                !CrType.IsInstanceOf(this._inner, constructor)
+            ) {
+                
+                this.pckTypeOf.set(constructor, false);
+                throw new TraverseTypeError(
+                    `Invalid object type (path=\"${this.path}\").`
+                );
             }
-            pckTypeOf.set(constructor, true);
+            this.pckTypeOf.set(constructor, true);
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -339,12 +311,12 @@ function Traverse(inner, path) {
      * 
      *  @throws {Traverse.TypeError}
      *      - The inner object is not numeric.
-     *  @return {Traverse}
+     *  @return
      *      - Self.
      */
-    this.numeric = function() {
-        self.typeOf(Number);
-        return self;
+    public numeric(): Traverse {
+        this.typeOf(Number);
+        return this;
     };
 
     /**
@@ -352,24 +324,23 @@ function Traverse(inner, path) {
      * 
      *  @throws {Traverse.TypeError}
      *      - The inner object is not an integer.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.integer = function() {
-        if (inner !== null) {
+    public integer(): Traverse {
+        if (this._inner !== null) {
             //  The inner object must be a number first.
-            self.numeric();
+            this.numeric();
     
             //  Check whether the number is an integer.
-            if (!Number.isInteger(inner)) {
-                throw new TraverseTypeError(Util.format(
-                    "Value should be an integer (path=\"%s\").",
-                    path
-                ));
+            if (!Number.isInteger(this._inner)) {
+                throw new TraverseTypeError(
+                    `Value should be an integer (path=\"${this.path}\").`,
+                );
             }
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -377,12 +348,12 @@ function Traverse(inner, path) {
      * 
      *  @throws {Traverse.TypeError}
      *      - The inner object is not a boolean.
-     *  @return {Traverse}
+     *  @returns
      *      - Self.
      */
-    this.boolean = function() {
-        self.typeOf(Boolean);
-        return self;
+    public boolean(): Traverse {
+        this.typeOf(Boolean);
+        return this;
     };
 
     /**
@@ -390,12 +361,12 @@ function Traverse(inner, path) {
      * 
      *  @throws {Traverse.TypeError}
      *      - The inner object is not string.
-     *  @return {Traverse}
+     *  @return
      *      - Self.
      */
-    this.string = function() {
-        self.typeOf(String);
-        return self;
+    public string(): Traverse {
+        this.typeOf(String);
+        return this;
     };
 
     /**
@@ -407,32 +378,31 @@ function Traverse(inner, path) {
      *      - The inner string mismatched with the character table.
      *  @throws {Traverse.TypeError}
      *      - The inner object is not string.
-     *  @param {String} charTable
+     *  @param charTable
      *      - The character table.
-     *  @return {Traverse}
+     *  @returns
      *      - Self.
      */
-    this.stringValidate = function(charTable) {
+    public stringValidate(charTable: string): Traverse {
         //  Check parameter type.
         if (!CrType.IsInstanceOf(charTable, String)) {
             throw new TraverseParameterError("Invalid character table.");
         }
 
-        if (!self.isNull()) {
+        if (!this.isNull()) {
             //  Check inner type.
-            self.string();
+            this.string();
 
             //  Validate the string.
-            if (!CrValidator.ValidateString(inner, charTable)) {
-                throw new TraverseFormatError(Util.format(
-                    "String is invalid (allowed=\"%s\", path=\"%s\").",
-                    charTable,
-                    path
-                ));
+            if (!CrValidator.ValidateString(this._inner, charTable)) {
+                throw new TraverseFormatError(
+                    `String is invalid (allowed=\"${charTable}\", ` + 
+                    `path=\"${this.path}\").`,
+                );
             }
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -446,10 +416,10 @@ function Traverse(inner, path) {
      *      - The inner object is not string.
      *  @param {RegExp} re
      *      - The regular expression.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.stringValidateByRegExp = function(re) {
+    public stringValidateByRegExp(re: RegExp): Traverse {
         //  Check parameter type.
         if (!CrType.IsInstanceOf(re, RegExp)) {
             throw new TraverseParameterError(
@@ -457,21 +427,20 @@ function Traverse(inner, path) {
             );
         }
 
-        if (!self.isNull()) {
+        if (!this.isNull()) {
             //  Check inner type.
-            self.string();
+            this.string();
 
             //  Validate the string.
-            if (!re.test(inner)) {
-                throw new TraverseFormatError(Util.format(
-                    "String is invalid (regexp=\"%s\", path=\"%s\").",
-                    re.source,
-                    path
-                ));
+            if (!re.test(this._inner)) {
+                throw new TraverseFormatError(
+                    `String is invalid (regexp=\"${re.source}\", ` +
+                    `path=\"${this.path}\").`
+                );
             }
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -486,27 +455,26 @@ function Traverse(inner, path) {
      *      - The inner string does not represent an integer.
      *  @throws {Traverse.TypeError}
      *      - The inner object is null or not string.
-     *  @return {Traverse}
+     *  @returns 
      *      - Traverse object that wraps the converted integer object.
      */
-    this.stringToInteger = function() {
+    public stringToInteger(): Traverse {
         //  Check inner type.
-        self.notNull().typeOf(String);
+        this.notNull().typeOf(String);
 
         //  Validate the string.
-        if (!CrTextDetector.IsInteger(inner)) {
-            throw new TraverseFormatError(Util.format(
-                "Not a valid integer string (path=\"%s\").",
-                path
-            ));
+        if (!CrTextDetector.IsInteger(this._inner)) {
+            throw new TraverseFormatError(
+                `Not a valid integer string (path=\"${this.path}\").`
+            );
         }
 
         //  Parse the string.
-        let intValue = parseInt(inner, 10);
+        let intValue = parseInt(this._inner, 10);
 
         return new Traverse(
             intValue,
-            _GetSubPath("[str->int]")
+            this._GetSubPath("[str->int]")
         );
     };
 
@@ -523,27 +491,26 @@ function Traverse(inner, path) {
      *      - The inner string does not represent a float number.
      *  @throws {Traverse.TypeError}
      *      - The inner object is null or not string.
-     *  @return {Traverse}
+     *  @returns 
      *      - Traverse object that wraps the converted float number object.
      */
-    this.stringToFloat = function() {
+    public stringToFloat(): Traverse {
         //  Check inner type.
-        self.notNull().typeOf(String);
+        this.notNull().typeOf(String);
 
         //  Validate the string.
-        if (!CrTextDetector.IsNumericStrict(inner)) {
-            throw new TraverseFormatError(Util.format(
-                "Not a valid float string (path=\"%s\").",
-                path
-            ));
+        if (!CrTextDetector.IsNumericStrict(this._inner)) {
+            throw new TraverseFormatError(
+                `Not a valid float string (path=\"${this.path}\").`
+            );
         }
 
         //  Parse the string.
-        let floatValue = parseFloat(inner);
+        let floatValue = parseFloat(this._inner);
 
         return new Traverse(
             floatValue,
-            _GetSubPath("[str->float]")
+            this._GetSubPath("[str->float]")
         );
     };
 
@@ -554,27 +521,27 @@ function Traverse(inner, path) {
      *      - Failed to parse the JSON object.
      *  @throws {Traverse.TypeError}
      *      - The inner object is not string.
-     *  @return {Traverse}
+     *  @returns 
      *      - The parsed JSON object wrapped with Traverse.
      */
-    this.jsonLoad = function() {
+    public jsonLoad(): Traverse {
         //  Get the sub path.
-        let subPath = _GetSubPath("[JSON(Load)]");
+        let subPath = this._GetSubPath("[JSON(Load)]");
 
-        if (!self.isNull()) {
+        if (!this.isNull()) {
             //  Ensure the inner object is a string.
-            self.string();
+            this.string();
 
             //  Parse the JSON.
             let parsed = null;
             try {
-                parsed = JSON.parse(inner);
+                parsed = JSON.parse(this._inner);
             } catch(error) {
-                throw new TraverseParseError(Util.format(
-                    "Unable to parse JSON object (error=\"%s\", path=\"%s\").",
-                    error.message || "(unknown)",
-                    subPath
-                ));
+                throw new TraverseParseError(
+                    `Unable to parse JSON object (` +
+                    `error=\"${error.message || "(unknown)"}\", ` +
+                    `path=\"${subPath}\").`
+                );
             }
 
             return new Traverse(parsed, subPath);
@@ -590,14 +557,16 @@ function Traverse(inner, path) {
      *      - Cyclic object value was found.
      *  @throws {Traverse.Error}
      *      - Other JSON serialization error occurred.
-     *  @return {Traverse}
+     *  @returns 
      *      - The serialized JSON string wrapped with Traverse.
      */
-    this.jsonSave = function() {
-        //  Serialize.
-        let serialized = null;
+    public jsonSave(): Traverse {
+        
+        let subPath: string = this._GetSubPath("[JSON(Save)]");
         try {
-            serialized = JSON.stringify(inner);
+            //  Serialize.
+            let serialized = JSON.stringify(this._inner);
+            return new Traverse(serialized, subPath);
         } catch(error) {
             //
             //  Reference(s):
@@ -605,22 +574,20 @@ function Traverse(inner, path) {
             //        ference/Global_Objects/JSON/stringify#Exceptions
             //
             if (error instanceof TypeError) {
-                throw new TraverseTypeError(Util.format(
-                    "Unable to serialize to JSON (error=\"%s\", path=\"%s\").",
-                    error.message || "(unknown)",
-                    subPath
-                ));
+                throw new TraverseTypeError(
+                    `Unable to serialize to JSON (` +
+                    `error=\"${error.message || "(unknown)"}\", ` +
+                    `path=\"${subPath}\").`
+                );
             } else {
                 //  Handle unstandardized error.
-                throw new TraverseError(Util.format(
-                    "Unable to serialize to JSON (error=\"%s\", path=\"%s\").",
-                    error.message || "(unknown)",
-                    subPath
-                ));
+                throw new TraverseError(
+                    `Unable to serialize to JSON (` +
+                    `error=\"${error.message || "(unknown)"}\", ` +
+                    `path=\"${subPath}\").`
+                );
             }
         }
-
-        return new Traverse(serialized, _GetSubPath("[JSON(Save)]"));
     };
 
     /**
@@ -635,28 +602,27 @@ function Traverse(inner, path) {
      *        Object.
      *  @throws {Traverse.KeyNotFoundError}
      *      - The sub path can't be found.
-     *  @param {*} name
+     *  @param name
      *      - The name(key) of sub directory.
-     *  @return {Traverse}
+     *  @returns 
      *      - Traverse object of sub directory.
      */
-    this.sub = function(name) {
+    public sub(name: any): Traverse {
         //  Pre-check.
-        self.notNull();
+        this.notNull();
 
         //  Get the sub path.
-        let subPath = _GetSubPath(name);
+        let subPath = this._GetSubPath(name);
 
-        if (CrType.IsInstanceOf(inner, Map)) {
-            if (inner.has(name)) {
-                return new Traverse(inner.get(name), subPath);
+        if (CrType.IsInstanceOf(this._inner, Map)) {
+            if (this._inner.has(name)) {
+                return new Traverse(this._inner.get(name), subPath);
             } else {
-                throw new TraverseKeyNotFoundError(Util.format(
-                    "Sub path doesn't exist (path=\"%s\").",
-                    subPath
-                ));
+                throw new TraverseKeyNotFoundError(
+                    `Sub path doesn't exist (path=\"${subPath}\").`
+                );
             }
-        } else if (CrType.IsInstanceOf(inner, Object)) {
+        } else if (CrType.IsInstanceOf(this._inner, Object)) {
             //  Check key type.
             if (!CrType.IsInstanceOf(name, String)) {
                 throw new TraverseParameterError(
@@ -664,20 +630,18 @@ function Traverse(inner, path) {
                 );
             }
 
-            if (name in inner) {
+            if (name in this._inner) {
                 //  Go into inner path.
-                return new Traverse(inner[name], subPath);
+                return new Traverse(this._inner[name], subPath);
             } else {
-                throw new TraverseKeyNotFoundError(Util.format(
-                    "Sub path doesn't exist (path=\"%s\").",
-                    subPath
-                ));
+                throw new TraverseKeyNotFoundError(
+                    `Sub path doesn't exist (path=\"${subPath}\").`
+                );
             }
         } else {
-            throw new TraverseTypeError(Util.format(
-                "Invalid inner type (expect=Map/Object, path=\"%s\").",
-                path
-            ));
+            throw new TraverseTypeError(
+                `Invalid inner type (expect=Map/Object, path=\"${this.path}\").`
+            );
         }
     };
 
@@ -691,27 +655,27 @@ function Traverse(inner, path) {
      *  @throws {Traverse.ParameterError}
      *      - The "name" parameter is not a string and the inner object is an
      *        Object.
-     *  @param {*} name
+     *  @param name
      *      - The name(key) of sub directory.
-     *  @param {*} defaultValue
+     *  @param defaultValue
      *      - The default value if the directory doesn't exist.
-     *  @return {Traverse}
+     *  @returns 
      *      - Traverse object of sub directory.
      */
-    this.optionalSub = function(name, defaultValue) {
+    public optionalSub(name: any, defaultValue: any): Traverse {
         //  Pre-check.
-        self.notNull();
+        this.notNull();
 
         //  Get the sub path.
-        let subPath = _GetSubPath(name);
+        let subPath = this._GetSubPath(name);
 
-        if (CrType.IsInstanceOf(inner, Map)) {
-            if (inner.has(name)) {
-                return new Traverse(inner.get(name), subPath);
+        if (CrType.IsInstanceOf(this._inner, Map)) {
+            if (this._inner.has(name)) {
+                return new Traverse(this._inner.get(name), subPath);
             } else {
                 return new Traverse(defaultValue, subPath);
             }
-        } else if (CrType.IsInstanceOf(inner, Object)) {
+        } else if (CrType.IsInstanceOf(this._inner, Object)) {
             //  Check key type.
             if (!CrType.IsInstanceOf(name, String)) {
                 throw new TraverseParameterError(
@@ -719,17 +683,16 @@ function Traverse(inner, path) {
                 );
             }
 
-            if (name in inner) {
+            if (name in this._inner) {
                 //  Go into inner path.
-                return new Traverse(inner[name], subPath);
+                return new Traverse(this._inner[name], subPath);
             } else {
                 return new Traverse(defaultValue, subPath);
             }
         } else {
-            throw new TraverseTypeError(Util.format(
-                "Invalid inner type (expect=map/object, path=\"%s\").",
-                path
-            ));
+            throw new TraverseTypeError(
+                `Invalid inner type (expect=map/object, path=\"${this.path}\").`
+            );
         }
     };
 
@@ -738,27 +701,26 @@ function Traverse(inner, path) {
      * 
      *  @throws {Traverse.TypeError}
      *      - The inner object is NULL.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.notNull = function() {
+    public notNull(): Traverse {
         //  Try to use cache first.
-        if (pckNotNull) {
-            return self;
+        if (this.pckNotNull) {
+            return this;
         }
 
         //  Ensure the value is not null.
-        if (inner === null) {
-            throw new TraverseTypeError(Util.format(
-                "Value should not be NULL (path=\"%s\").",
-                path
-            ));
+        if (this._inner === null) {
+            throw new TraverseTypeError(
+                `Value should not be NULL (path=\"${this.path}\").`
+            );
         }
 
         //  Write cache.
-        pckNotNull = true;
+        this.pckNotNull = true;
 
-        return self;
+        return this;
     };
 
     /**
@@ -771,38 +733,35 @@ function Traverse(inner, path) {
      *      - The type of the inner object is different to the threshold object.
      *  @throws {Traverse.ValueOutOfRangeError}
      *      - The value is not within the threshold.
-     *  @param {*} threshold
+     *  @param threshold
      *      - The threshold.
-     *  @param {TraverseComparator} [comparator]
+     *  @param comparator
      *      - The comparator.
-     *  @return {Traverse}
+     *  @returns
      *      - Self.
      */
-    this.min = function(
-        threshold, 
-        comparator = Traverse.DEFAULT_COMPARATOR
-    ) {
-        if (inner !== null) {
+    public min<T>(
+        threshold: T, 
+        comparator: Traverse.Comparator<T> = new Traverse.Comparator<T>()
+    ): Traverse {
+        if (this._inner !== null) {
             //  Check object type.
-            if (!CrType.IsSameType(inner, threshold)) {
-                throw new TraverseParameterError(Util.format(
-                    "Uncomparable type (path=\"%s\").",
-                    path
-                ));
+            if (!CrType.IsSameType(this._inner, threshold)) {
+                throw new TraverseParameterError(
+                    `Uncomparable type (path=\"${this.path}\").`
+                );
             }
 
             //  Check value range.
-            if (comparator.lt(inner, threshold)) {
-                throw new TraverseValueOutOfRangeError(Util.format(
-                    "Value is too small (path=\"%s\", require='>=', " + 
-                    "threshold=%s).",
-                    path,
-                    _GetObjectRepresentation(threshold) || "(unrepresentable)"
-                ));
+            if (comparator.lt(this._inner, threshold)) {
+                throw new TraverseValueOutOfRangeError(
+                    `Value is too small (path=\"${this.path}\", require='>=', `+
+                    `threshold=${this._GetObjectRepresentation(threshold)}).`
+                );
             }
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -817,36 +776,33 @@ function Traverse(inner, path) {
      *      - The value is not within the threshold.
      *  @param {*} threshold
      *      - The threshold.
-     *  @param {TraverseComparator} [comparator]
+     *  @param comparator
      *      - The comparator.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.minExclusive = function(
-        threshold, 
-        comparator = Traverse.DEFAULT_COMPARATOR
-    ) {
-        if (inner !== null) {
+    public minExclusive<T>(
+        threshold: T, 
+        comparator: Traverse.Comparator<T> = new Traverse.Comparator<T>()
+    ): Traverse {
+        if (this._inner !== null) {
             //  Check object type.
-            if (!CrType.IsSameType(inner, threshold)) {
-                throw new TraverseParameterError(Util.format(
-                    "Uncomparable type (path=\"%s\").",
-                    path
-                ));
+            if (!CrType.IsSameType(this._inner, threshold)) {
+                throw new TraverseParameterError(
+                    `Uncomparable type (path=\"${this.path}\").`
+                );
             }
 
             //  Check value range.
-            if (comparator.le(inner, threshold)) {
-                throw new TraverseValueOutOfRangeError(Util.format(
-                    "Value is too small (path=\"%s\", require='>', " + 
-                    "threshold=%s.",
-                    path,
-                    _GetObjectRepresentation(threshold) || "(unrepresentable)"
-                ));
+            if (comparator.le(this._inner, threshold)) {
+                throw new TraverseValueOutOfRangeError(
+                    `Value is too small (path=\"${this.path}\", require='>', ` + 
+                    `threshold=${this._GetObjectRepresentation(threshold)}.`
+                );
             }
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -859,38 +815,35 @@ function Traverse(inner, path) {
      *      - The type of the inner object is different to the threshold object.
      *  @throws {Traverse.ValueOutOfRangeError}
      *      - The value is not within the threshold.
-     *  @param {*} threshold
+     *  @param threshold
      *      - The threshold.
-     *  @param {TraverseComparator} [comparator]
+     *  @param comparator
      *      - The comparator.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.max = function(
-        threshold, 
-        comparator = Traverse.DEFAULT_COMPARATOR
-    ) {
-        if (inner !== null) {
+    public max<T>(
+        threshold: T, 
+        comparator: Traverse.Comparator<T> = new Traverse.Comparator<T>()
+    ): Traverse {
+        if (this._inner !== null) {
             //  Check object type.
-            if (!CrType.IsSameType(inner, threshold)) {
-                throw new TraverseParameterError(Util.format(
-                    "Uncomparable type (path=\"%s\").",
-                    path
-                ));
+            if (!CrType.IsSameType(this._inner, threshold)) {
+                throw new TraverseParameterError(
+                    `Uncomparable type (path=\"${this.path}\").`
+                );
             }
 
             //  Check value range.
-            if (comparator.gt(inner, threshold)) {
-                throw new TraverseValueOutOfRangeError(Util.format(
-                    "Value is too large (path=\"%s\", require='<=', " + 
-                    "threshold=%s).",
-                    path,
-                    _GetObjectRepresentation(threshold) || "(unrepresentable)"
-                ));
+            if (comparator.gt(this._inner, threshold)) {
+                throw new TraverseValueOutOfRangeError(
+                    `Value is too large (path=\"${this.path}\", require='<=', `+ 
+                    `threshold=${this._GetObjectRepresentation(threshold)}).`
+                );
             }
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -903,38 +856,35 @@ function Traverse(inner, path) {
      *      - The type of the inner object is different to the threshold object.
      *  @throws {Traverse.ValueOutOfRangeError}
      *      - The value is not within the threshold.
-     *  @param {*} threshold
+     *  @param threshold
      *      - The threshold.
-     *  @param {TraverseComparator} [comparator]
+     *  @param comparator
      *      - The comparator.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.maxExclusive = function(
-        threshold, 
-        comparator = Traverse.DEFAULT_COMPARATOR
-    ) {
-        if (inner !== null) {
+    public maxExclusive<T>(
+        threshold: T, 
+        comparator: Traverse.Comparator<T> = new Traverse.Comparator<T>()
+    ): Traverse {
+        if (this._inner !== null) {
             //  Check object type.
-            if (!CrType.IsSameType(inner, threshold)) {
-                throw new TraverseParameterError(Util.format(
-                    "Uncomparable type (path=\"%s\").",
-                    path
-                ));
+            if (!CrType.IsSameType(this._inner, threshold)) {
+                throw new TraverseParameterError(
+                    `Uncomparable type (path=\"${this.path}\").`
+                );
             }
 
             //  Check value range.
-            if (comparator.ge(inner, threshold)) {
-                throw new TraverseValueOutOfRangeError(Util.format(
-                    "Value is too large (path=\"%s\", require='<', " + 
-                    "threshold=%s).",
-                    path,
-                    _GetObjectRepresentation(threshold) || "(unrepresentable)"
-                ));
+            if (comparator.ge(this._inner, threshold)) {
+                throw new TraverseValueOutOfRangeError(
+                    `Value is too large (path=\"${this.path}\", require='<', ` + 
+                    `threshold=${this._GetObjectRepresentation(threshold)}).`
+                );
             }
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -943,26 +893,27 @@ function Traverse(inner, path) {
      *  Expected:
      *    [1] min <= inner <= max
      * 
+     *  @template T
      *  @throws {Traverse.ParameterError}
      *      - The type of the inner object is different to the threshold 
      *        objects.
      *  @throws {Traverse.ValueOutOfRangeError}
      *      - The value is not within the thresholds.
-     *  @param {*} minValue
+     *  @param minValue
      *      - The minimum threshold.
-     *  @param {*} maxValue
+     *  @param maxValue
      *      - The maximum threshold.
-     *  @param {TraverseComparator} [comparator]
+     *  @param comparator
      *      - The comparator.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.range = function(
-        minValue, 
-        maxValue, 
-        comparator = Traverse.DEFAULT_COMPARATOR
-    ) {
-        return self.min(minValue, comparator).max(maxValue, comparator);
+    public range<T>(
+        minValue: T, 
+        maxValue: T, 
+        comparator: TraverseComparator<T> = new TraverseComparator<T>()
+    ): Traverse {
+        return this.min(minValue, comparator).max(maxValue, comparator);
     };
 
     /**
@@ -976,20 +927,15 @@ function Traverse(inner, path) {
      *      - The index out of range.
      *  @throws {Traverse.ParameterError}
      *      - The "from" parameter is not valid (not an array).
-     *  @param {Array} from
+     *  @param from
      *      - The array.
-     *  @return {Traverse}
+     *  @returns 
      *      - Traverse object of selected item.
      */
-    this.selectFromArray = function(from) {
-        //  Check from object.
-        if (!Array.isArray(from)) {
-            throw new TraverseParameterError("Expect an array object.");
-        }
-
+    public selectFromArray(from: any[]): Traverse {
         //  Check inner type.
         try {
-            self.notNull().integer().min(0).maxExclusive(from.length);
+            this.notNull().integer().min(0).maxExclusive(from.length);
         } catch(error) {
             if (error instanceof TraverseValueOutOfRangeError) {
                 throw new TraverseIndexOutOfRangeError(error.message);
@@ -999,10 +945,10 @@ function Traverse(inner, path) {
         }
 
         //  Wrap new object.
-        return new Traverse(from[inner], _GetSubPath(Util.format(
-            "[%d]",
-            inner
-        )));
+        return new Traverse(
+            from[this._inner], 
+            this._GetSubPath(`[${this._inner}]`)
+        );
     };
 
     /**
@@ -1016,29 +962,22 @@ function Traverse(inner, path) {
      *      - The key doesn't exist.
      *  @param {Object} from
      *      - The object.
-     *  @return {Traverse}
+     *  @returns 
      *      - Traverse object of selected item.
      */
-    this.selectFromObject = function(from) {
-        //  Check from object.
-        if (!(from instanceof Object)) {
-            throw new TraverseParameterError("Expect an object.");
-        }
-
+    public selectFromObject(from: object): Traverse {
         //  Check inner type.
-        self.notNull().typeOf(String);
+        this.notNull().typeOf(String);
 
         //  Check key existence.
-        if (!(inner in from)) {
-            throw new TraverseKeyNotFoundError(Util.format(
-                "\"%s\" doesn't exist (path=\"%s\").",
-                inner,
-                path
-            ));
+        if (!(this._inner in from)) {
+            throw new TraverseKeyNotFoundError(
+                `\"${this._inner}\" doesn't exist (path=\"${this.path}\").`
+            );
         }
 
         //  Wrap new object.
-        return new Traverse(from[inner], _GetSubPath(inner));
+        return new Traverse(from[this._inner], this._GetSubPath(this._inner));
     };
 
     /**
@@ -1048,22 +987,25 @@ function Traverse(inner, path) {
      *      - One of following conditions:
      *        - The inner object is NULL.
      *        - The inner object is not string.
-     *  @param {Object} from
+     *  @param from
      *      - The object.
-     *  @param {*} defaultValue
+     *  @param defaultValue
      *      - The default value if the key doesn't exist.
-     *  @return {Traverse}
+     *  @returns 
      *      - Traverse object of selected item.
      */
-    this.selectFromObjectOptional = function(from, defaultValue) {
+    public selectFromObjectOptional(
+        from: object, 
+        defaultValue: any
+    ): Traverse {
         //  Check inner type.
-        self.notNull().typeOf(String);
+        this.notNull().typeOf(String);
 
         try {
-            return self.selectFromObject(from);
+            return this.selectFromObject(from);
         } catch(error) {
             if (error instanceof TraverseKeyNotFoundError) {
-                return new Traverse(defaultValue, _GetSubPath(inner));
+                return new Traverse(defaultValue,this._GetSubPath(this._inner));
             } else {
                 throw error;
             }
@@ -1077,29 +1019,22 @@ function Traverse(inner, path) {
      *      - The key doesn't exist.
      *  @throws {Traverse.ParameterError}
      *      - The "from" parameter is not valid (not a Map object).
-     *  @param {Map} from
+     *  @param from
      *      - The map.
-     *  @return {Traverse}
+     *  @returns 
      *      - Traverse object of selected item.
      */
-    this.selectFromMap = function(from) {
-        //  Check from object.
-        if (!(from instanceof Map)) {
-            throw new TraverseParameterError("Expect a map object.");
-        }
-
+    public selectFromMap<T1, T2>(from: Map<T1, T2>): Traverse {
         //  Check key existence.
-        if (!from.has(inner)) {
-            throw new TraverseKeyNotFoundError(Util.format(
-                "\"%s\" doesn't exist (path=\"%s\").",
-                inner,
-                path
-            ));
+        if (!from.has(this._inner)) {
+            throw new TraverseKeyNotFoundError(
+                `\"${this._inner}\" doesn't exist (path=\"${this.path}\").`
+            );
         }
 
         //  Wrap new object.
-        return new Traverse(from.get(inner), _GetSubPath(
-            _GetObjectRepresentation(inner) || "(unrepresentable)"
+        return new Traverse(from.get(this._inner), this._GetSubPath(
+            this._GetObjectRepresentation(this._inner)
         ));
     };
 
@@ -1108,20 +1043,23 @@ function Traverse(inner, path) {
      * 
      *  @throws {Traverse.ParameterError}
      *      - The "from" parameter is not valid (not a Map object).
-     *  @param {Map} from
+     *  @param from
      *      - The map.
-     *  @param {*} defaultValue
+     *  @param defaultValue
      *      - The default value when the key doesn't exist.
-     *  @return {Traverse}
+     *  @returns 
      *      - Traverse object of selected item.
      */
-    this.selectFromMapOptional = function(from, defaultValue) {
+    public selectFromMapOptional(
+        from: Map<any, any>, 
+        defaultValue: any
+    ): Traverse {
         try {
-            return self.selectFromMap(from);
+            return this.selectFromMap(from);
         } catch(error) {
             if (error instanceof TraverseKeyNotFoundError) {
-                return new Traverse(defaultValue, _GetSubPath(
-                    _GetObjectRepresentation(inner) || "(unrepresentable)"
+                return new Traverse(defaultValue, this._GetSubPath(
+                    this._GetObjectRepresentation(this._inner)
                 ));
             } else {
                 throw error;
@@ -1136,13 +1074,15 @@ function Traverse(inner, path) {
      *      - The inner object is not an Object.
      *  @param {(value: Traverse) => void} callback
      *      - The callback.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.objectForEach = function(callback) {
-        self.objectForEachEx(function(traverse) {
-            callback.call(self, traverse);
+    public objectForEach(callback: (value: Traverse) => void): Traverse {
+        let _self = this;
+        this.objectForEachEx(function(traverse) {
+            callback.call(_self, traverse);
         });
+        return this;
     };
 
     /**
@@ -1152,25 +1092,27 @@ function Traverse(inner, path) {
      *      - The inner object is not an Object.
      *  @param {(value: Traverse, key: string) => void} callback
      *      - The callback.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.objectForEachEx = function(callback) {
-        if (!self.isNull()) {
+    public objectForEachEx(
+        callback: (value: Traverse, key: string) => void
+    ): Traverse {
+        if (!this.isNull()) {
             //  Check type.
-            self.typeOf(Object);
+            this.typeOf(Object);
 
             //  Scan all keys.
-            for (let key in inner) {
+            for (let key in this._inner) {
                 callback.call(
-                    self, 
-                    new Traverse(inner[key], _GetSubPath(key)), 
+                    this, 
+                    new Traverse(this._inner[key], this._GetSubPath(key)), 
                     key
                 );
             }
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -1178,23 +1120,23 @@ function Traverse(inner, path) {
      * 
      *  @throws {Traverse.TypeError}
      *      - The inner object is not an Object.
-     *  @param {String} key
+     *  @param key
      *      - The key.
-     *  @param {*} value
+     *  @param value
      *      - The value.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.objectSet = function(key, value) {
-        if (!self.isNull()) {
+    public objectSet = function(key: string, value: any): Traverse {
+        if (!this.isNull()) {
             //  Check type.
-            self.typeOf(Object);
+            this.typeOf(Object);
     
             //  Set the key pair.
-            inner[key] = value;
+            this._inner[key] = value;
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -1204,16 +1146,16 @@ function Traverse(inner, path) {
      *      - One of following conditions:
      *        - The inner object is NULL.
      *        - The inner object is not an Object.
-     *  @param {String} key
+     *  @param key
      *      - The key.
      *  @return {Boolean}
      *      - True if so.
      */
-    this.objectHas = function(key) {
+    public objectHas = function(key: string): boolean {
         //  Check type.
-        self.notNull().typeOf(Object);
+        this.notNull().typeOf(Object);
 
-        return (key in inner);
+        return (key in this._inner);
     };
 
     /**
@@ -1226,11 +1168,11 @@ function Traverse(inner, path) {
      *  @return {Number}
      *      - The length.
      */
-    this.arrayLength = function() {
+    public arrayLength = function(): number {
         //  Check type.
-        self.notNull().typeOf(Array);
+        this.notNull().typeOf(Array);
 
-        return inner.length;
+        return this._inner.length;
     };
 
     /**
@@ -1244,27 +1186,27 @@ function Traverse(inner, path) {
      *      - 'offset' is not an integer.
      *  @throws {Traverse.IndexOutOfRangeError}
      *      - 'offset' is out of range.
-     *  @param {Number} offset
+     *  @param offset
      *      - The offset of the item within the array.
-     *  @return {Traverse} 
+     *  @returns  
      *      - Traverse object of the item.
      */
-    this.arrayGetItem = function(offset) {
+    public arrayGetItem(offset: number): Traverse {
         //  Check type.
-        self.notNull().typeOf(Array);
+        this.notNull().typeOf(Array);
 
         //  Check the offset.
         if (!Number.isInteger(offset)) {
-            throw new Traverse.ParameterError("Offset must be an integer.");
+            throw new TraverseParameterError("Offset must be an integer.");
         }
-        if (offset < 0 || offset >= inner.length) {
-            throw new Traverse.IndexOutOfRangeError("Offset is out of range.");
+        if (offset < 0 || offset >= this._inner.length) {
+            throw new TraverseIndexOutOfRangeError("Offset is out of range.");
         }
 
         //  Get the item.
         return new Traverse(
-            inner[offset],
-            _GetSubPath(Util.format("[%d]", offset))
+            this._inner[offset],
+            this._GetSubPath(`[${offset}]`)
         );
     };
 
@@ -1281,27 +1223,33 @@ function Traverse(inner, path) {
      *      - The offset of the item within the array.
      *  @param {*} value
      *      - The item value.
-     *  @return {Traverse} 
+     *  @returns  
      *      - Self.
      */
-    this.arraySetItem = function(offset, value) {
+    public arraySetItem(offset: number, value: any): Traverse {
         //  Check the offset.
         if (!Number.isInteger(offset)) {
-            throw new Traverse.ParameterError("Offset must be an integer.");
+            throw new TraverseParameterError("Offset must be an integer.");
         }
-        if (offset < 0 || offset >= inner.length) {
-            throw new Traverse.IndexOutOfRangeError("Offset is out of range.");
+        if (offset < 0) {
+            throw new TraverseIndexOutOfRangeError("Offset is out of range.");
         }
 
-        if (!self.notNull()) {
+        if (!this.isNull()) {
             //  Check type.
-            self.typeOf(Array);
+            this.typeOf(Array);
+
+            if (offset >= this._inner.length) {
+                throw new TraverseIndexOutOfRangeError(
+                    "Offset is out of range."
+                );
+            }
 
             //  Set the item.
-            inner[offset] = value;
+            this._inner[offset] = value;
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -1311,19 +1259,19 @@ function Traverse(inner, path) {
      *      - The inner object is not an array.
      *  @param {*} value
      *      - The item value.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.arrayPushItem = function(value) {
-        if (!self.isNull()) {
+    public arrayPushItem(value): Traverse {
+        if (!this.isNull()) {
             //  Check type.
-            self.typeOf(Array);
+            this.typeOf(Array);
 
             //  Push the item.
-            inner.push(value);
+            this._inner.push(value);
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -1335,23 +1283,23 @@ function Traverse(inner, path) {
      *        - The inner object is not an array.
      *  @throws {Traverse.IndexOutOfRangeError}
      *      - The array is already empty.
-     *  @return {Traverse}
+     *  @returns 
      *      - Traverse object of the popped item.
      */
-    this.arrayPopItem = function() {
+    public arrayPopItem(): Traverse {
         //  Check type.
-        self.notNull().typeOf(Array);
+        this.notNull().typeOf(Array);
 
         //  Check the array.
-        if (inner.length == 0) {
-            throw new Traverse.IndexOutOfRangeError("Array is empty.");
+        if (this._inner.length == 0) {
+            throw new TraverseIndexOutOfRangeError("Array is empty.");
         }
 
         //  Pop an item.
-        let item = inner.pop();
+        let item = this._inner.pop();
         return new Traverse(
             item,
-            _GetSubPath(Util.format("[%d]", inner.length))
+            this._GetSubPath(`[${this._inner.length}]`)
         );
     };
 
@@ -1364,22 +1312,22 @@ function Traverse(inner, path) {
      *        - The inner object is not an array.
      *  @throws {Traverse.IndexOutOfRangeError}
      *      - The array is already empty.
-     *  @return {Traverse}
+     *  @returns 
      *      - Traverse object of the shifted item.
      */
-    this.arrayShiftItem = function() {
+    public arrayShiftItem(): Traverse {
         //  Check type.
-        self.notNull().typeOf(Array);
+        this.notNull().typeOf(Array);
 
         //  Check the array.
-        if (inner.length == 0) {
-            throw new Traverse.IndexOutOfRangeError("Array is empty.");
+        if (this._inner.length == 0) {
+            throw new TraverseIndexOutOfRangeError("Array is empty.");
         }
 
         //  Shift an item.
         return new Traverse(
-            inner.shift(),
-            _GetSubPath("[0]")
+            this._inner.shift(),
+            this._GetSubPath("[0]")
         );
     };
 
@@ -1390,19 +1338,19 @@ function Traverse(inner, path) {
      *      - The inner object is not an array.
      *  @param {*} value
      *      - The item value.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.arrayUnshiftItem = function(item) {
-        if (!self.isNull()) {
+    public arrayUnshiftItem(value: any): Traverse {
+        if (!this.isNull()) {
             //  Check type.
-            self.typeOf(Array);
+            this.typeOf(Array);
 
             //  Unshift the item.
-            inner.unshift(item);
+            this._inner.unshift(value);
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -1418,22 +1366,22 @@ function Traverse(inner, path) {
      *  @param {Boolean} [reverse]
      *      - True if iteration direction should be inverted (from back to 
      *        front).
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.arrayForEach = function(callback, reverse = false) {
-        if (!self.isNull()) {
+    public arrayForEach(
+        callback: (item: Traverse, cbs: TIterationCallbacks) => void,
+        reverse: boolean = false
+    ): Traverse {
+        if (!this.isNull()) {
             //  Check type.
-            self.typeOf(Array);
+            this.typeOf(Array);
 
             //  Initialize iteration context.
             let swStop = false;
             let swDelete = false;
 
-            /**
-             *  @type {TIterationCallbacks}
-             */
-            let callbacks = {
+            let callbacks: TIterationCallbacks = {
                 "stop": function() {
                     swStop = true;
                 },
@@ -1444,13 +1392,13 @@ function Traverse(inner, path) {
 
             //  Scan all items.
             if (reverse) {
-                for (let cursor = inner.length - 1; cursor >= 0; --cursor) {
-                    callback.call(self, new Traverse(
-                        inner[cursor], 
-                        _GetSubPath(Util.format("[%d]", cursor))
+                for (let cursor = this._inner.length - 1; cursor >= 0; --cursor){
+                    callback.call(this, new Traverse(
+                        this._inner[cursor], 
+                        this._GetSubPath(`[${cursor}]`)
                     ), callbacks);
                     if (swDelete) {
-                        inner.splice(cursor, 1);
+                        this._inner.splice(cursor, 1);
                         swDelete = false;
                     }
                     if (swStop) {
@@ -1459,13 +1407,13 @@ function Traverse(inner, path) {
                 }
             } else {
                 let cursor = 0;
-                while (cursor < inner.length) {
-                    callback.call(self, new Traverse(
-                        inner[cursor], 
-                        _GetSubPath(Util.format("[%d]", cursor))
+                while (cursor < this._inner.length) {
+                    callback.call(this, new Traverse(
+                        this._inner[cursor], 
+                        this._GetSubPath(`[${cursor}]`)
                     ), callbacks);
                     if (swDelete) {
-                        inner.splice(cursor, 1);
+                        this._inner.splice(cursor, 1);
                         swDelete = false;
                     } else {
                         ++cursor;
@@ -1477,7 +1425,7 @@ function Traverse(inner, path) {
             }
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -1492,35 +1440,37 @@ function Traverse(inner, path) {
      *      - This method would be removed totally in next major version.
      *  @throws {Traverse.TypeError}
      *      - The inner object is not an array.
-     *  @param {(item: Traverse) => Boolean} callback
+     *  @param callback
      *      - The callback.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.arrayForEachWithDeletion = function(callback) {
-        if (!self.isNull()) {
+    public arrayForEachWithDeletion(
+        callback: (item: Traverse) => boolean
+    ): Traverse {
+        if (!this.isNull()) {
             //  Check type.
-            self.typeOf(Array);
+            this.typeOf(Array);
 
             //  Scan all items.
             let cursor = 0;
-            while (cursor < inner.length) {
+            while (cursor < this._inner.length) {
                 let isDelete = callback.call(
-                    self, 
+                    this, 
                     new Traverse(
-                        inner[cursor], 
-                        _GetSubPath(Util.format("[%d]", cursor))
+                        this._inner[cursor], 
+                        this._GetSubPath(`[${cursor}]`)
                     )
                 );
                 if (isDelete) {
-                    inner.splice(cursor, 1);
+                    this._inner.splice(cursor, 1);
                 } else {
                     ++cursor;
                 }
             }
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -1532,28 +1482,25 @@ function Traverse(inner, path) {
      *      - The array size exceeds.
      *  @param {Number} minLength
      *      - The minimum length.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.arrayMinLength = function(minLength) {
-        if (!self.isNull()) {
+    public arrayMinLength(minLength): Traverse {
+        if (!this.isNull()) {
             //  Check type.
-            self.typeOf(Array);
+            this.typeOf(Array);
 
             //  Check array length.
-            let currentLength = inner.length;
+            let currentLength = this._inner.length;
             if (currentLength < minLength) {
-                throw new TraverseSizeError(Util.format(
-                    "Array should have at least %d item(s) (path=\"%s\", " + 
-                    "current=%d).",
-                    minLength,
-                    path,
-                    currentLength
-                ));
+                throw new TraverseSizeError(
+                    `Array should have at least ${minLength} item(s) ` +
+                    `(path=\"${this.path}\", current=${currentLength}).`
+                );
             }    
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -1565,28 +1512,25 @@ function Traverse(inner, path) {
      *      - The array size exceeds.
      *  @param {Number} maxLength
      *      - The maximum length.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.arrayMaxLength = function(maxLength) {
-        if (!self.isNull()) {
+    public arrayMaxLength(maxLength: number): Traverse {
+        if (!this.isNull()) {
             //  Check type.
-            self.typeOf(Array);
+            this.typeOf(Array);
 
             //  Check array length.
-            let currentLength = inner.length;
+            let currentLength = this._inner.length;
             if (currentLength > maxLength) {
-                throw new TraverseSizeError(Util.format(
-                    "Array should have at most %d item(s) (path=\"%s\", " + 
-                    "current=%d).",
-                    maxLength,
-                    path,
-                    currentLength
-                ));
+                throw new TraverseSizeError(
+                    `Array should have at most ${maxLength} item(s) ` +
+                    `(path=\"${this.path}\", current=${currentLength}).`
+                );
             }
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -1595,8 +1539,8 @@ function Traverse(inner, path) {
      *  @return {Boolean}
      *      - True if so.
      */
-    this.isNull = function() {
-        return inner === null;
+    public isNull(): boolean {
+        return this._inner === null;
     };
 
     /**
@@ -1606,22 +1550,24 @@ function Traverse(inner, path) {
      *      - The type of "selections" parameter is not supported.
      *  @throws {Traverse.KeyNotFoundError}
      *      - The item doesn't exist in the "selections".
-     *  @param {Set|Map|Array|Object} selections
+     *  @param selections
      *      - The selections.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.oneOf = function(selections) {
-        if (inner !== null) {
+    public oneOf(
+        selections: Set<any> | Map<any, any> | any[] | object
+    ): Traverse {
+        if (this._inner !== null) {
             let has = false;
             if (selections instanceof Set) {
-                has = selections.has(inner);
+                has = selections.has(this._inner);
             } else if (selections instanceof Map) {
-                has = selections.has(inner);
+                has = selections.has(this._inner);
             } else if (selections instanceof Array) {
-                has = (selections.indexOf(inner) >= 0);
+                has = (selections.indexOf(this._inner) >= 0);
             } else if (selections instanceof Object) {
-                has = (inner in selections);
+                has = (this._inner in selections);
             } else {
                 throw new TraverseParameterError(
                     "Unsupported selections type (only Map/Set/Array/Object " + 
@@ -1629,14 +1575,14 @@ function Traverse(inner, path) {
                 );
             }
             if (!has) {
-                throw new TraverseKeyNotFoundError(Util.format(
-                    "\"%s\" is not available.",
-                    _GetObjectRepresentation(inner) || "(unrepresentable)"
-                ));
+                throw new TraverseKeyNotFoundError(
+                    `\"${this._GetObjectRepresentation(this._inner)}\" ` +
+                    `is not available.`
+                );
             }
         }
 
-        return self;
+        return this;
     }
 
     /**
@@ -1653,16 +1599,16 @@ function Traverse(inner, path) {
      *      - The callback return false.
      *  @param {(inner: *) => Boolean)} callback
      *      - The rule callback.
-     *  @return {Traverse}
+     *  @returns 
      *      - Self.
      */
-    this.customRule = function(callback) {
+    public customRule = function(callback) {
         //  Check type.
         if (!(callback instanceof Function)) {
             throw new TraverseParameterError("Expect a Function.");
         }
         
-        let isConformed = callback.call(self, inner);
+        let isConformed = callback.call(this, this._inner);
 
         //  Check the return value.
         if (
@@ -1671,23 +1617,18 @@ function Traverse(inner, path) {
             !CrType.IsInstanceOf(isConformed, Boolean)
         ) {
             throw new TraverseParameterError(
-                Util.format(
-                    "Callback should return a Boolean. (path=\"%s\")",
-                    path
-                )
+                `Callback should return a Boolean. (path=\"${this.path}\")`
             );
         }
 
         if (!isConformed) {
             throw new TraverseError(
-                Util.format(
-                    "The inner doesn't conform the custom rule. (path=\"%s\")",
-                    path
-                )
+                `The inner doesn't conform the custom rule. ` +
+                `(path=\"${this.path}\")`
             );
         }
 
-        return self;
+        return this;
     };
 
     /**
@@ -1696,8 +1637,8 @@ function Traverse(inner, path) {
      *  @return {*}
      *      - The inner object.
      */
-    this.inner = function() {
-        return inner;
+    public inner = function() {
+        return this._inner;
     };
 
     /**
@@ -1706,21 +1647,38 @@ function Traverse(inner, path) {
      *  @return {*}
      *      - The inner object.
      */
-    this.unwrap = function() {
-        return self.inner();
+    public unwrap(): any {
+        return this._inner;
     };
 }
-Traverse.DEFAULT_COMPARATOR = new TraverseComparator();
-Traverse.Error = TraverseError;
-Traverse.ParameterError = TraverseParameterError;
-Traverse.TypeError = TraverseTypeError;
-Traverse.FormatError = TraverseFormatError;
-Traverse.ParseError = TraverseParseError;
-Traverse.SizeError = TraverseSizeError;
-Traverse.KeyNotFoundError = TraverseKeyNotFoundError;
-Traverse.IndexOutOfRangeError = TraverseIndexOutOfRangeError;
-Traverse.ValueOutOfRangeError = TraverseValueOutOfRangeError;
-Traverse.Comparator = TraverseComparator;
+
+//
+//  Namespace.
+//
+export namespace Traverse {
+    export const DEFAULT_COMPARATOR = new TraverseComparator<any>();
+    export const Error = TraverseError;
+    export const ParameterError = TraverseParameterError;
+    export const TypeError = TraverseTypeError;
+    export const FormatError = TraverseFormatError;
+    export const ParseError = TraverseParseError;
+    export const SizeError = TraverseSizeError;
+    export const KeyNotFoundError = TraverseKeyNotFoundError;
+    export const IndexOutOfRangeError = TraverseIndexOutOfRangeError;
+    export const ValueOutOfRangeError = TraverseValueOutOfRangeError;
+    export const Comparator = TraverseComparator;
+
+    export type Error = TraverseError;
+    export type ParameterError = TraverseParameterError;
+    export type TypeError = TraverseTypeError;
+    export type FormatError = TraverseFormatError;
+    export type ParseError = TraverseParseError;
+    export type SizeError = TraverseSizeError;
+    export type KeyNotFoundError = TraverseKeyNotFoundError;
+    export type IndexOutOfRangeError = TraverseIndexOutOfRangeError;
+    export type ValueOutOfRangeError = TraverseValueOutOfRangeError;
+    export type Comparator<T> = TraverseComparator<T>;
+}
 
 //
 //  Public functions.
@@ -1729,36 +1687,17 @@ Traverse.Comparator = TraverseComparator;
 /**
  *  Wrap an object with Traverse.
  * 
- *  @param {*} inner
+ *  @param inner
  *      - The inner object.
- *  @param {Boolean} [force]
+ *  @param force
  *      - Still wrap the object when the inner object is a Traverse.
- *  @return {Traverse}
+ *  @returns 
  *      - The traverse object.
  */
-function WrapObject(inner, force = false) {
+export function WrapObject(inner: any, force: boolean = false): Traverse {
     if ((inner instanceof Traverse) && !force) {
         return inner;
     } else {
         return new Traverse(inner, "/");
     }
 }
-
-//
-//  Inheritances.
-//
-Util.inherits(TraverseError, Error);
-Util.inherits(TraverseParameterError, TraverseError);
-Util.inherits(TraverseTypeError, TraverseError);
-Util.inherits(TraverseFormatError, TraverseError);
-Util.inherits(TraverseParseError, TraverseError);
-Util.inherits(TraverseSizeError, TraverseError);
-Util.inherits(TraverseKeyNotFoundError, TraverseError);
-Util.inherits(TraverseIndexOutOfRangeError, TraverseError);
-Util.inherits(TraverseValueOutOfRangeError, TraverseError);
-
-//  Export public APIs.
-module.exports = {
-    "Traverse": Traverse,
-    "WrapObject": WrapObject
-};

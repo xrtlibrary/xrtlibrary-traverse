@@ -10,15 +10,15 @@
 
 /**
  *  Validate a string.
- * 
- *  @param {String} text
+ *
+ *  @param text 
  *      - The text.
- *  @param {String} charTable
+ *  @param charTable 
  *      - The character table.
- *  @return {Boolean}
+ *  @returns
  *      - True if valid.
  */
-function ValidateString(text, charTable) {
+export function ValidateString(text: string, charTable: string): boolean {
     for (let i = 0; i < text.length; ++i) {
         if (charTable.indexOf(text[i]) < 0) {
             return false;
@@ -26,8 +26,3 @@ function ValidateString(text, charTable) {
     }
     return true;
 }
-
-//  Export public APIs.
-module.exports = {
-    "ValidateString": ValidateString
-};

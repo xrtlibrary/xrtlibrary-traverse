@@ -2,7 +2,8 @@
   "name": "xrtlibrary-traverse",
   "version": "1.0.11",
   "description": "Object traverse utility of XRT library.",
-  "main": "library/api.js",
+  "main": "./build/library/api.js",
+  "types": "./build/library/api.d.ts",
   "author": "The XRT Authors",
   "license": "BSD-3-Clause"
 }

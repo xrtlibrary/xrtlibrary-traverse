@@ -9,16 +9,16 @@
 //
 
 /**
- *  Check the type of an object.
+ *  Check the type of an object. 
  * 
- *  @param {*} instance
+ *  @param instance 
  *      - The object instance. 
- *  @param {*} constructor
+ *  @param constructor 
  *      - The object constructor (type).
- *  @return {Boolean}
+ *  @returns 
  *      - True if type matches.
  */
-function IsInstanceOf(instance, constructor) {
+export function IsInstanceOf(instance: any, constructor: any): boolean {
     if (
         constructor == Number || 
         constructor == Boolean || 
@@ -37,10 +37,10 @@ function IsInstanceOf(instance, constructor) {
  *      - The first instance.
  *  @param {*} instance2
  *      - The second instance.
- *  @return {Boolean}
+ *  @returns
  *      - True if types are the same.
  */
-function IsSameType(instance1, instance2) {
+export function IsSameType(instance1: any, instance2: any): boolean {
     let t1 = typeof(instance1);
     let t2 = typeof(instance2);
     if (
@@ -57,9 +57,3 @@ function IsSameType(instance1, instance2) {
     }
     return t1 == t2 && IsInstanceOf(instance1, instance2.constructor);
 }
-
-//  Export public APIs.
-module.exports = {
-    "IsInstanceOf": IsInstanceOf,
-    "IsSameType": IsSameType
-};

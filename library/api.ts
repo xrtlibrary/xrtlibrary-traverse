@@ -5,14 +5,12 @@
 //
 
 //
-//  Imports.
+//  Imports
 //
 
 //  Imported modules.
-const CrTraverse = require("./../core/traverse");
+import CrTraverse = require("./../core/traverse");
 
 //  Export public APIs.
-module.exports = {
-    "Traverse": CrTraverse.Traverse,
-    "WrapObject": CrTraverse.WrapObject
-};
+export { Traverse as Traverse} from "./../core/traverse";
+export { WrapObject as WrapObject } from "./../core/traverse";

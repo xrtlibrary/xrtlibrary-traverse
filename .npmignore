@@ -4,14 +4,7 @@
 #  found in the LICENSE.md file.
 #
 
-#  Internal files.
-internal/
-
-#  Dependency directories
-node_modules/
-
-#  Backup files.
-*.bak
-
-#  TypeScript
-build/**/*
+#  TypeScript source code and configuration file.
+tsconfig.json
+core/**/*
+library/**/*
