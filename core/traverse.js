@@ -1293,13 +1293,18 @@ function Traverse(inner, path) {
         if (!Number.isInteger(offset)) {
             throw new Traverse.ParameterError("Offset must be an integer.");
         }
-        if (offset < 0 || offset >= inner.length) {
+        if (offset < 0) {
             throw new Traverse.IndexOutOfRangeError("Offset is out of range.");
         }
-
-        if (!self.notNull()) {
+        if (!self.isNull()) {
             //  Check type.
             self.typeOf(Array);
+
+            if (offset >= inner.length) {
+                throw new Traverse.IndexOutOfRangeError(
+                    "Offset is out of range."
+                );
+            }
 
             //  Set the item.
             inner[offset] = value;
