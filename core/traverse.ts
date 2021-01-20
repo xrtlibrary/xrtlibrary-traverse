@@ -114,28 +114,28 @@ class TraverseComparator<T> {
     /**
      *  Get whether two values ("a" and "b") are equal.
      * 
-     *  @param {T} a
+     *  @param a
      *      - The value "a".
-     *  @param {T} b
+     *  @param b
      *      - The value "b".
      *  @returns 
      *      - True if so.
      */
-    public eq = function(a: T, b: T) {
+    public eq(a: T, b: T) {
         return a == b;
     };
 
     /**
      *  Get whether value "a" is less than or equal to value "b".
      * 
-     *  @param {T} a
+     *  @param a
      *      - The value "a".
-     *  @param {T} b
+     *  @param b
      *      - The value "b".
      *  @returns 
      *      - True if so.
      */
-    public le = function(a: T, b: T) {
+    public le(a: T, b: T) {
         return a <= b;
     };
 
@@ -149,21 +149,21 @@ class TraverseComparator<T> {
      *  @returns 
      *      - True if so.
      */
-    public lt = function(a: T, b: T) {
+    public lt(a: T, b: T) {
         return a < b;
     };
 
     /**
      *  Get whether value "a" is greater than or equal to value "b".
      * 
-     *  @param {T} a
+     *  @param a
      *      - The value "a".
-     *  @param {T} b
+     *  @param b
      *      - The value "b".
      *  @returns
      *      - True if so.
      */
-    public ge = function(a: T, b: T) {
+    public ge(a: T, b: T) {
         return a >= b;
     };
 
@@ -177,7 +177,7 @@ class TraverseComparator<T> {
      *  @returns
      *      - True if so.
      */
-    public gt = function(a: T, b: T) {
+    public gt(a: T, b: T) {
         return a > b;
     };
 }
@@ -414,7 +414,7 @@ export class Traverse {
      *      - The inner string mismatched with the regular expression.
      *  @throws {Traverse.TypeError}
      *      - The inner object is not string.
-     *  @param {RegExp} re
+     *  @param re
      *      - The regular expression.
      *  @returns 
      *      - Self.
@@ -729,6 +729,7 @@ export class Traverse {
      *  Expected:
      *    [1] inner >= threshold
      * 
+     *  @template T
      *  @throws {Traverse.ParameterError}
      *      - The type of the inner object is different to the threshold object.
      *  @throws {Traverse.ValueOutOfRangeError}
@@ -770,11 +771,12 @@ export class Traverse {
      *  Expected:
      *    [1] inner > threshold
      * 
+     *  @template T
      *  @throws {Traverse.ParameterError}
      *      - The type of the inner object is different to the threshold object.
      *  @throws {Traverse.ValueOutOfRangeError}
      *      - The value is not within the threshold.
-     *  @param {*} threshold
+     *  @param threshold
      *      - The threshold.
      *  @param comparator
      *      - The comparator.
@@ -811,6 +813,7 @@ export class Traverse {
      *  Expected:
      *    [1] inner <= threshold
      * 
+     *  @template T
      *  @throws {Traverse.ParameterError}
      *      - The type of the inner object is different to the threshold object.
      *  @throws {Traverse.ValueOutOfRangeError}
@@ -852,6 +855,7 @@ export class Traverse {
      *  Expected:
      *    [1] inner < threshold
      * 
+     *  @template T
      *  @throws {Traverse.ParameterError}
      *      - The type of the inner object is different to the threshold object.
      *  @throws {Traverse.ValueOutOfRangeError}
@@ -919,6 +923,7 @@ export class Traverse {
     /**
      *  Select an item from specific array (inner object as the index).
      * 
+     *  @template T
      *  @throws {Traverse.TypeError}
      *      - One of following conditions:
      *        - The inner object is NULL.
@@ -932,7 +937,7 @@ export class Traverse {
      *  @returns 
      *      - Traverse object of selected item.
      */
-    public selectFromArray(from: any[]): Traverse {
+    public selectFromArray<T>(from: Array<T>): Traverse {
         //  Check inner type.
         try {
             this.notNull().integer().min(0).maxExclusive(from.length);
@@ -960,7 +965,7 @@ export class Traverse {
      *        - The inner object is not string.
      *  @throws {Traverse.KeyNotFoundError}
      *      - The key doesn't exist.
-     *  @param {Object} from
+     *  @param from
      *      - The object.
      *  @returns 
      *      - Traverse object of selected item.
@@ -1050,8 +1055,8 @@ export class Traverse {
      *  @returns 
      *      - Traverse object of selected item.
      */
-    public selectFromMapOptional(
-        from: Map<any, any>, 
+    public selectFromMapOptional<T1, T2>(
+        from: Map<T1, T2>, 
         defaultValue: any
     ): Traverse {
         try {
@@ -1072,7 +1077,7 @@ export class Traverse {
      * 
      *  @throws {Traverse.TypeError}
      *      - The inner object is not an Object.
-     *  @param {(value: Traverse) => void} callback
+     *  @param callback
      *      - The callback.
      *  @returns 
      *      - Self.
@@ -1090,7 +1095,7 @@ export class Traverse {
      * 
      *  @throws {Traverse.TypeError}
      *      - The inner object is not an Object.
-     *  @param {(value: Traverse, key: string) => void} callback
+     *  @param callback
      *      - The callback.
      *  @returns 
      *      - Self.
@@ -1127,7 +1132,7 @@ export class Traverse {
      *  @returns 
      *      - Self.
      */
-    public objectSet = function(key: string, value: any): Traverse {
+    public objectSet(key: string, value: any): Traverse {
         if (!this.isNull()) {
             //  Check type.
             this.typeOf(Object);
@@ -1148,10 +1153,10 @@ export class Traverse {
      *        - The inner object is not an Object.
      *  @param key
      *      - The key.
-     *  @return {Boolean}
+     *  @returns 
      *      - True if so.
      */
-    public objectHas = function(key: string): boolean {
+    public objectHas(key: string): boolean {
         //  Check type.
         this.notNull().typeOf(Object);
 
@@ -1165,10 +1170,10 @@ export class Traverse {
      *      - One of following conditions:
      *        - The inner object is NULL.
      *        - The inner object is not an array.
-     *  @return {Number}
+     *  @returns 
      *      - The length.
      */
-    public arrayLength = function(): number {
+    public arrayLength(): number {
         //  Check type.
         this.notNull().typeOf(Array);
 
@@ -1219,9 +1224,9 @@ export class Traverse {
      *      - 'offset' is not an integer.
      *  @throws {Traverse.IndexOutOfRangeError}
      *      - 'offset' is out of range.
-     *  @param {Number} offset
+     *  @param offset
      *      - The offset of the item within the array.
-     *  @param {*} value
+     *  @param value
      *      - The item value.
      *  @returns  
      *      - Self.
@@ -1257,7 +1262,7 @@ export class Traverse {
      * 
      *  @throws {Traverse.TypeError}
      *      - The inner object is not an array.
-     *  @param {*} value
+     *  @param value
      *      - The item value.
      *  @returns 
      *      - Self.
@@ -1336,7 +1341,7 @@ export class Traverse {
      * 
      *  @throws {Traverse.TypeError}
      *      - The inner object is not an array.
-     *  @param {*} value
+     *  @param value
      *      - The item value.
      *  @returns 
      *      - Self.
@@ -1358,12 +1363,12 @@ export class Traverse {
      * 
      *  @throws {Traverse.TypeError}
      *      - The inner object is not an array.
-     *  @param {(item: Traverse, cbs: TIterationCallbacks) => void} callback
+     *  @param callback
      *      - The callback.
      *        - "item": The traverse object that wraps the array item.
      *        - "cbs":  An object that contains callbacks that are used to stop 
      *                  iteration or delete current item.
-     *  @param {Boolean} [reverse]
+     *  @param reverse
      *      - True if iteration direction should be inverted (from back to 
      *        front).
      *  @returns 
@@ -1480,12 +1485,12 @@ export class Traverse {
      *      - The inner object is not an array.
      *  @throws {Traverse.SizeError}
      *      - The array size exceeds.
-     *  @param {Number} minLength
+     *  @param minLength
      *      - The minimum length.
      *  @returns 
      *      - Self.
      */
-    public arrayMinLength(minLength): Traverse {
+    public arrayMinLength(minLength: number): Traverse {
         if (!this.isNull()) {
             //  Check type.
             this.typeOf(Array);
@@ -1510,7 +1515,7 @@ export class Traverse {
      *      - The inner object is not an array.
      *  @throws {Traverse.SizeError}
      *      - The array size exceeds.
-     *  @param {Number} maxLength
+     *  @param maxLength
      *      - The maximum length.
      *  @returns 
      *      - Self.
@@ -1536,7 +1541,7 @@ export class Traverse {
     /**
      *  Get whether the inner object is NULL.
      * 
-     *  @return {Boolean}
+     *  @returns 
      *      - True if so.
      */
     public isNull(): boolean {
@@ -1556,7 +1561,7 @@ export class Traverse {
      *      - Self.
      */
     public oneOf(
-        selections: Set<any> | Map<any, any> | any[] | object
+        selections: Set<any> | Map<any, any> | Array<any> | object
     ): Traverse {
         if (this._inner !== null) {
             let has = false;
@@ -1597,12 +1602,12 @@ export class Traverse {
      *        - The callback doesn't return a Boolean.
      *  @throws {Traverse.Error}
      *      - The callback return false.
-     *  @param {(inner: *) => Boolean)} callback
+     *  @param callback
      *      - The rule callback.
      *  @returns 
      *      - Self.
      */
-    public customRule = function(callback) {
+    public customRule(callback: (inner: any) => boolean): Traverse {
         //  Check type.
         if (!(callback instanceof Function)) {
             throw new TraverseParameterError("Expect a Function.");
@@ -1634,17 +1639,17 @@ export class Traverse {
     /**
      *  (Compatible, use unwrap() in new application) Get the inner object.
      * 
-     *  @return {*}
+     *  @returns 
      *      - The inner object.
      */
-    public inner = function() {
+    public inner(): any {
         return this._inner;
     };
 
     /**
      *  Unwrap the traverse object.
      * 
-     *  @return {*}
+     *  @returns 
      *      - The inner object.
      */
     public unwrap(): any {
