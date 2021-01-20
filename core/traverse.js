@@ -1144,7 +1144,7 @@ function Traverse(inner, path) {
      *      - Self.
      */
     this.objectForEach = function(callback) {
-        self.objectForEachEx(function(traverse) {
+        return self.objectForEachEx(function(traverse) {
             callback.call(self, traverse);
         });
     };
