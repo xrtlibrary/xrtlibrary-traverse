@@ -471,6 +471,10 @@ function Traverse(inner, path) {
     this.jsonSave = function() {
         //  Serialize.
         let serialized = null;
+
+        //  Sub path.
+        let subPath = _GetSubPath("[JSON(Save)]");
+
         try {
             serialized = JSON.stringify(inner);
         } catch(error) {
@@ -495,7 +499,7 @@ function Traverse(inner, path) {
             }
         }
 
-        return new Traverse(serialized, _GetSubPath("[JSON(Save)]"));
+        return new Traverse(serialized, subPath);
     };
 
     /**
