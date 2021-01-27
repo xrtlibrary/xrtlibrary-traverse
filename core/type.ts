@@ -33,9 +33,9 @@ export function IsInstanceOf(instance: any, constructor: any): boolean {
 /**
  *  Get whether two objects are the same type.
  * 
- *  @param {*} instance1
+ *  @param instance1
  *      - The first instance.
- *  @param {*} instance2
+ *  @param instance2
  *      - The second instance.
  *  @returns
  *      - True if types are the same.

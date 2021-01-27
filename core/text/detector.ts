@@ -30,12 +30,12 @@ const REGEX_NUMERIC_STRICT = /^(-?(0|[1-9]([0-9]*)))(\.[0-9]+)?$/;
  *    [2] "-0" is considered as an integer.
  *    [3] Positive number starts with "0" is not considered as an integer.
  * 
- *  @param {String} text
+ *  @param text
  *      - The text.
- *  @return {Boolean}
+ *  @return 
  *      - True if so.
  */
-export function IsInteger(text) {
+export function IsInteger(text: string) {
     return REGEX_INTEGER.test(text);
 }
 
@@ -55,11 +55,11 @@ export function IsInteger(text) {
  *    [4] -0.2 => true
  *    [5] .2 => false
  * 
- *  @param {String} text
+ *  @param text
  *      - The text.
  *  @return {Boolean}
  *      - True if so.
  */
-export function IsNumericStrict(text) {
+export function IsNumericStrict(text: string) {
     return REGEX_NUMERIC_STRICT.test(text);
 }

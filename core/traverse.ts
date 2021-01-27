@@ -1020,6 +1020,8 @@ export class Traverse {
     /**
      *  Select an item from specific map (use inner object as the key).
      * 
+     *  @template T1
+     *  @template T2
      *  @throws {Traverse.KeyNotFoundError}
      *      - The key doesn't exist.
      *  @throws {Traverse.ParameterError}
@@ -1046,6 +1048,8 @@ export class Traverse {
     /**
      *  Select an optional item from specific map (inner object as the key).
      * 
+     *  @template T1
+     *  @template T2
      *  @throws {Traverse.ParameterError}
      *      - The "from" parameter is not valid (not a Map object).
      *  @param from
@@ -1267,7 +1271,7 @@ export class Traverse {
      *  @returns 
      *      - Self.
      */
-    public arrayPushItem(value): Traverse {
+    public arrayPushItem(value: any): Traverse {
         if (!this.isNull()) {
             //  Check type.
             this.typeOf(Array);

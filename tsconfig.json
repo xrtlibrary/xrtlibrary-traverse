@@ -1,9 +1,13 @@
 {
     "compilerOptions": {
-      "module": "commonjs",
-      "target": "ES6",
-      "declaration": true,
-      "outDir": "./build"
+        "charset": "utf8",
+        "declaration": true,
+        "module": "UMD",
+        "newLine": "lf",
+        "outDir": "./build",
+        "strict": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "target": "ES6"
     },
     "include": [
         "./core/*.ts",
