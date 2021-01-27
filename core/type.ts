@@ -18,7 +18,7 @@
  *  @returns 
  *      - True if type matches.
  */
-export function IsInstanceOf(instance: any, constructor: any): boolean {
+export function IsInstanceOf(instance: any, constructor: Function): boolean {
     if (
         constructor == Number || 
         constructor == Boolean || 

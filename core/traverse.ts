@@ -274,7 +274,7 @@ export class Traverse {
      *  @return
      *      - Self.
      */
-    public typeOf(constructor: any): Traverse {
+    public typeOf(constructor: Function): Traverse {
         //  Check input parameter.
         if (!CrType.IsInstanceOf(constructor, Function)) {
             throw new TraverseParameterError("Not a constructor.");
