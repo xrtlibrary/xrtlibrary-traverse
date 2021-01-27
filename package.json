@@ -1,6 +1,6 @@
 {
   "name": "xrtlibrary-traverse",
-  "version": "1.0.11",
+  "version": "1.2.1",
   "description": "Object traverse utility of XRT library.",
   "main": "./build/library/api.js",
   "types": "./build/library/api.d.ts",
