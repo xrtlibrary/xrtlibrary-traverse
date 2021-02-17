@@ -1733,7 +1733,7 @@ export namespace Traverse {
     //
     //  Default.
     //
-    export const DEFAULT_COMPARATOR = new Traverse.Comparator<unknown>();
+    export const DEFAULT_COMPARATOR = new Traverse.Comparator<any>();
 }
 
 //
